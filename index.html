@@ -25,7 +25,7 @@ button,select{font-family:inherit;font-size:1rem}
 .btn.ghost{background:transparent;color:var(--gold);border:1.5px solid var(--gold2)}
 /* ticker */
 .ticker{position:sticky;top:0;z-index:50;background:#2a0b1a;border-bottom:3px solid var(--gold2);overflow:hidden;white-space:nowrap;padding:10px 0}
-.ticker .track{display:inline-block;padding-right:100%;animation:scroll 400s linear infinite}
+.ticker .track{display:inline-block;padding-right:100%;animation:scroll 320s linear infinite}
 .ticker:hover .track{animation-play-state:paused}
 .ticker span{font-family:'Amiri',serif;font-weight:700;font-size:1.45rem;color:var(--gold);margin:0 22px}
 .ticker i{color:#ff9fbd;font-style:normal;font-size:1.2rem}
@@ -564,6 +564,15 @@ function kidRender(){
   }
   $('kidBox').innerHTML=top+board_html;
 }
+
+/* تلاوة الآية عند فتح الموقع بصوت ياسر الدوسري (الآية ١٧ من سورة القمر) */
+const intro=new Audio('https://everyayah.com/data/Yasser_Ad-Dussary_128kbps/054017.mp3');
+const IEV=['pointerdown','keydown','touchstart'];
+const introGo=()=>intro.play().then(()=>IEV.forEach(e=>document.removeEventListener(e,introGo))).catch(()=>{});
+introGo();
+IEV.forEach(e=>document.addEventListener(e,introGo));
+aud.addEventListener('play',()=>intro.pause());
+$('mAud').addEventListener('play',()=>intro.pause());
 </script>
 </body>
 </html>
