@@ -89,6 +89,38 @@ footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
 .flip .b{transform:rotateY(180deg)}
 .edge{position:absolute;top:50%;transform:translateY(-50%);z-index:8;width:44px;height:44px;border-radius:50%;border:0;background:#f7dc94;color:#4a1428;font-size:1.7rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 4px 14px #0008}
 .edge.el{left:-10px}.edge.er{right:-10px}
+/* kids */
+#kids h3{color:var(--gold);font-family:'Amiri Quran',serif;font-size:1.6rem;text-align:center;margin:8px 0}
+.kcard{background:linear-gradient(160deg,#8a3556,#5f2038);border:2px solid var(--gold2);border-radius:22px;padding:18px;text-align:center;margin-bottom:16px;box-shadow:0 10px 30px #0007}
+.kav{font-size:3.2rem;line-height:1.2}.ka{font-size:1.8rem;line-height:1}
+.kcard h3{margin:0}
+.kstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.kstats div{background:#0003;border-radius:14px;padding:8px 2px;font-size:.85rem}
+.kstats b{display:block;font-size:1.5rem;color:var(--gold)}
+.kst{letter-spacing:3px;font-size:1.2rem;min-height:1.6em}
+.kgoal{margin:10px 0}
+.kbar{height:14px;background:#0004;border-radius:10px;overflow:hidden;margin-top:6px}
+.kbar i{display:block;height:100%;background:linear-gradient(90deg,#f7dc94,#e0aa4c);border-radius:10px;transition:width .6s}
+.kway{list-style:none;background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin-bottom:16px;line-height:2}
+.kpro{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:12px 0}
+.kpro button{background:var(--card2);color:var(--txt);border:2px solid var(--line);border-radius:18px;padding:12px;cursor:pointer;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px}
+.kpro button:hover{border-color:var(--gold);transform:translateY(-2px)}
+.kadd{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:16px}
+.kadd summary{cursor:pointer;font-weight:700;color:var(--gold)}
+.kadd input{display:block;width:100%;margin:10px 0;padding:10px;border-radius:10px;border:1px solid var(--gold2);background:#4a1428;color:var(--txt);font-family:inherit;font-size:1rem}
+.kavs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.kavs button{font-size:1.6rem;background:#4a1428;border:2px solid transparent;border-radius:12px;padding:4px 8px;cursor:pointer}
+.kavs button.on{border-color:var(--gold);background:#7a2f4a}
+.kb{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:12px}
+.kr{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px}
+.kr.first{background:linear-gradient(90deg,#f7dc9433,transparent)}
+.kr.me{outline:2px solid var(--gold2)}
+.kr b{width:34px;text-align:center;font-size:1.4rem}
+.kn{flex:1;font-weight:700}
+.kp{color:var(--gold);font-weight:800}
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,120px);background:linear-gradient(#f7dc94,#e0aa4c);color:#4a1428;font-weight:800;padding:12px 22px;border-radius:30px;box-shadow:0 8px 24px #000a;z-index:200;opacity:0;pointer-events:none;max-width:92vw;text-align:center}
+#toast.go{animation:tst 3.6s forwards}
+@keyframes tst{0%{opacity:0;transform:translate(-50%,120px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,120px)}}
 /* ayah audio */
 .ay{cursor:pointer;border-radius:6px;transition:background .2s}
 .ay:hover{background:#f0d9a2}
@@ -117,6 +149,7 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
   <button data-t="book">📜 المصحف</button>
   <button data-t="listen">🎧 الاستماع</button>
   <button data-t="mem">🌙 التحفيظ</button>
+  <button data-t="kids">⭐ الأطفال</button>
 </nav>
 
 <main>
@@ -188,6 +221,10 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
   <div class="mem" id="memBox">اختر السورة…</div>
   <p style="text-align:center;margin-top:10px;color:#f3c6d4;font-size:.9rem">نصيحة: كرر الآية حتى تحفظها، ثم أخفِ النص واختبر نفسك. اضغط على أي آية لتبدأ منها.</p>
 </section>
+<section id="kids">
+  <div id="kidBox"></div>
+  <p class="status" style="font-size:.85rem;opacity:.8">النقاط والترتيب محفوظة على هذا الجهاز وهذا المتصفح.</p>
+</section>
 </main>
 
 <footer>﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾ — جعلنا الله وإياكم من أهل القرآن</footer>
@@ -236,7 +273,7 @@ $('mReciter').value=4;
 /* التبويبات */
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));$(b.dataset.t).classList.add('on');if(b.dataset.t==='book')bookShow();
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));$(b.dataset.t).classList.add('on');if(b.dataset.t==='book')bookShow();if(b.dataset.t==='kids')kidRender();
 });
 function enter(){$('splash').classList.add('hide');setTimeout(()=>$('splash').remove(),900)}
 
@@ -314,7 +351,7 @@ function memNext(first){
   if(!mRun)return;
   const to=+$('mTo').value,from=+$('mFrom').value,reps=+$('mRep').value;
   if(!first){mRep++;if(mRep>=reps){mRep=0;mIdx++}}
-  if(mIdx>to){if($('mLoop').checked){mIdx=from;mRep=0}else{memStop();$('mStatus').textContent='✔ انتهى المقطع، بارك الله فيك';return}}
+  if(mIdx>to){if($('mLoop').checked){mIdx=from;mRep=0}else{memStop();$('mStatus').textContent='✔ انتهى المقطع، بارك الله فيك';kidMem(mS,from,to);return}}
   const r=RECITERS[$('mReciter').value];let folder=r.e,note='';
   if(!folder){folder=RECITERS[4].e;note=' (بصوت العفاسي — التحفيظ آية بآية غير متوفر لهذا القارئ)'}
   renderMem(mIdx);
@@ -362,6 +399,7 @@ function info(){
   $('bPage').value=cur;
   $('bInfo').textContent=spread()?`صفحة ${ar(cur)} – ${ar(Math.min(cur+1,TP))} من ${ar(TP)}`:`صفحة ${ar(cur)} من ${ar(TP)}`;
   try{localStorage.setItem('bp',cur)}catch(e){}
+  clearTimeout(rt);rt=setTimeout(()=>{kidPage(cur);if(spread()&&cur<TP)kidPage(cur+1)},15000);
   [cur+2,cur+3].forEach(n=>{if(n<=TP)getPage(n).catch(()=>{})});
 }
 async function show(){
@@ -428,6 +466,104 @@ addEventListener('resize',()=>{if(spread()!==rw){rw=spread();if($('book').classL
 /* تشغيل واحد فقط في كل مرة */
 aud.addEventListener('play',()=>{if(mRun||!$('mAud').paused)memStop()});
 $('mAud').addEventListener('play',()=>{if(!aud.paused)aud.pause()});
+
+/* الأطفال: حسابات ونقاط ونجوم وكأس */
+const KEY='kidsData',GOAL=3,AVS=['🦁','🐰','🐼','🦊','🐯','🐨','🐸','🦄','🐧','🐱','🐶','🐢'];
+const LV=[[0,'بذرة 🌱'],[100,'برعم 🌿'],[300,'زهرة 🌸'],[600,'بطل القرآن 🛡️'],[1000,'نجم القرآن 🌟']];
+let KD={users:[],me:null},selAv=AVS[0],rt=null;
+try{KD=JSON.parse(localStorage.getItem(KEY))||KD}catch(e){}
+const ksave=()=>{try{localStorage.setItem(KEY,JSON.stringify(KD))}catch(e){}};
+const me=()=>KD.users.find(u=>u.id===KD.me);
+const esc=t=>t.replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const nd=t=>(t||'').replace(/[٠-٩]/g,d=>d.charCodeAt(0)-1632);
+const today=()=>new Date().toLocaleDateString('en-CA');
+const lv=p=>[...LV].reverse().find(x=>p>=x[0]);
+function toast(m){
+  let t=$('toast');if(!t){t=document.createElement('div');t.id='toast';document.body.append(t)}
+  t.textContent=m;t.classList.remove('go');void t.offsetWidth;t.classList.add('go');
+}
+function award(pts,msg){
+  const u=me();if(!u)return;
+  const d=today();let ex='';
+  if(u.last!==d){
+    u.streak=u.last===new Date(Date.now()-864e5).toLocaleDateString('en-CA')?(u.streak||0)+1:1;u.last=d;
+    pts+=Math.min(u.streak,7)*2;ex=` + 🔥 ${ar(u.streak)} يوم متتابع`;
+  }
+  const s0=Math.floor(u.tp/25),l0=lv(u.tp)[0];
+  u.tp+=pts;u.cp+=pts;ksave();
+  let m=`+${ar(pts)} نقطة ${msg}${ex}`;
+  if(Math.floor(u.tp/25)>s0)m+=' ⭐ نجمة جديدة!';
+  if(lv(u.tp)[0]>l0)m+=` 🎉 صرت «${lv(u.tp)[1]}»`;
+  toast(m);
+  if($('kids').classList.contains('on'))kidRender();
+}
+function kidPage(n){
+  const u=me();if(!u||!$('book').classList.contains('on'))return;
+  const d=today();if(!u.pg||u.pg.d!==d)u.pg={d,l:[]};
+  if(u.pg.l.includes(n))return;
+  u.pg.l.push(n);
+  let pts=5,msg='لقراءة صفحة '+ar(n);
+  if(u.pg.l.length===GOAL){pts+=15;msg+=' وإتمام وردك اليوم 🎉'}
+  award(pts,msg);
+}
+function kidMem(s,a,b){
+  const u=me();
+  if(!u){toast('سجّل دخولك من تبويب الأطفال لتحصل على نقاطك ⭐');return}
+  const d=today(),k=`${s}:${a}-${b}`;
+  if(!u.mm||u.mm.d!==d)u.mm={d,l:[]};
+  if(u.mm.l.includes(k)){toast('أحسنت! أخذت نقاط هذا المقطع اليوم، جرّب مقطعاً جديداً');return}
+  u.mm.l.push(k);
+  const h=$('mHide').checked;
+  award(Math.min(100,(b-a+1)*3*(h?2:1)),h?'للحفظ بدون النظر ×٢ 🧠':'لحفظ المقطع');
+}
+function kidIn(id){
+  const x=KD.users.find(u=>u.id===id);
+  if(x.pin&&nd(prompt('الرقم السري لـ '+x.name))!==x.pin){toast('الرقم السري غير صحيح');return}
+  KD.me=id;ksave();kidRender();
+}
+function kidOut(){KD.me=null;ksave();kidRender()}
+function kidAdd(){
+  const n=$('kName').value.trim(),p=nd($('kPin').value.trim());
+  if(!n){toast('اكتب اسم الطفل');return}
+  if(p&&!/^\d{4}$/.test(p)){toast('الرقم السري ٤ أرقام');return}
+  const u={id:'u'+Date.now(),name:n,av:selAv,pin:p,tp:0,cp:0,cups:0,streak:0};
+  KD.users.push(u);KD.me=u.id;ksave();kidRender();
+}
+function kidDel(){
+  const u=me();
+  if(u&&confirm('حذف حساب '+u.name+' ونقاطه نهائياً؟')){KD.users=KD.users.filter(x=>x!==u);KD.me=null;ksave();kidRender()}
+}
+function kidNew(){
+  const b=[...KD.users].sort((a,c)=>c.cp-a.cp)[0];
+  if(!b||b.cp<=0){toast('لا توجد نقاط بعد في هذه المنافسة');return}
+  if(!confirm('سيتوّج '+b.name+' بالكأس 🏆 وتبدأ منافسة جديدة من الصفر. متابعة؟'))return;
+  b.cups=(b.cups||0)+1;KD.users.forEach(x=>x.cp=0);ksave();kidRender();toast('🏆 مبروك '+b.name+'! بطل المنافسة');
+}
+function kidRender(){
+  const u=me(),medals=['🏆','🥈','🥉'];
+  const board=[...KD.users].sort((a,b)=>b.cp-a.cp||b.tp-a.tp);
+  const rows=board.length?board.map((x,i)=>`<div class="kr${i===0&&x.cp>0?' first':''}${x.id===KD.me?' me':''}"><b>${(x.cp>0&&medals[i])||ar(i+1)}</b><span class="ka">${x.av}</span><span class="kn">${esc(x.name)}${x.cups?' <small>'+'🏆'.repeat(Math.min(x.cups,5))+(x.cups>5?'+':'')+'</small>':''}</span><span class="kp">${ar(x.cp)} نقطة</span></div>`).join(''):'<p class="status">لا يوجد أطفال بعد، أضف أول بطل!</p>';
+  const board_html=`<h3>🏆 لوحة المنافسة</h3><div class="kb">${rows}</div><div style="text-align:center;margin-bottom:16px"><button class="btn sm ghost" onclick="kidNew()">🏁 إنهاء المنافسة وتتويج البطل</button></div>`;
+  let top;
+  if(u){
+    const L=lv(u.tp),nx=LV.find(x=>x[0]>u.tp),st=Math.floor(u.tp/25),n=(u.pg&&u.pg.d===today())?u.pg.l.length:0;
+    top=`<div class="kcard"><div class="kav">${u.av}</div><h3>${esc(u.name)}</h3><div>${L[1]}</div>
+    <div class="kstats"><div><b>${ar(u.tp)}</b>نقطة</div><div><b>${ar(st)}</b>نجمة</div><div><b>${ar(u.streak||0)}</b>🔥 يوم</div><div><b>${ar(u.cups||0)}</b>🏆 كأس</div></div>
+    <div class="kst">${'⭐'.repeat(Math.min(st,15))}</div>
+    <div class="kgoal">وردك اليوم: ${ar(Math.min(n,GOAL))} من ${ar(GOAL)} صفحات<div class="kbar"><i style="width:${Math.min(100,n/GOAL*100)}%"></i></div></div>
+    ${nx?`<small>باقي ${ar(nx[0]-u.tp)} نقطة لتصبح «${nx[1]}»</small><br>`:''}
+    <button class="btn sm ghost" onclick="kidOut()">تبديل الطفل</button> <button class="btn sm ghost" onclick="kidDel()">حذف الحساب</button></div>
+    <ul class="kway"><li>📖 اقرأ في «المصحف»: كل صفحة تبقى مفتوحة ١٥ ثانية = ٥ نقاط</li><li>🎯 ٣ صفحات في اليوم = وردك اليوم، ومكافأة ١٥ نقطة</li><li>🌙 أتمّ مقطعاً في «التحفيظ»: ٣ نقاط لكل آية، والضعف مع إخفاء النص</li><li>🔥 كل يوم متتابع يزيد المكافأة</li><li>⭐ نجمة جديدة مع كل ٢٥ نقطة</li></ul>`;
+  }else{
+    top=`<h3>من سيقرأ اليوم؟</h3><div class="kpro">${KD.users.map(x=>`<button onclick="kidIn('${x.id}')"><span class="ka">${x.av}</span>${esc(x.name)}</button>`).join('')}</div>
+    <details class="kadd"${KD.users.length?'':' open'}><summary>➕ إضافة طفل جديد</summary>
+    <input id="kName" maxlength="20" placeholder="اسم الطفل">
+    <div class="kavs">${AVS.map(a=>`<button class="${a===selAv?'on':''}" onclick="selAv='${a}';document.querySelectorAll('.kavs button').forEach(b=>b.classList.toggle('on',b.textContent===selAv))">${a}</button>`).join('')}</div>
+    <input id="kPin" maxlength="4" inputmode="numeric" placeholder="رقم سري (اختياري، ٤ أرقام)">
+    <button class="btn sm" onclick="kidAdd()">حفظ</button></details>`;
+  }
+  $('kidBox').innerHTML=top+board_html;
+}
 </script>
 </body>
 </html>
