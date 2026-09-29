@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>القرآن الكريم — قراءة واستماع وتحفيظ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#5b1e35;--bg2:#3a1024;--card:#7a2f4a;--card2:#6a2640;--gold:#f7dc94;--gold2:#e8b95a;--txt:#fff3e2;--line:#a8536f}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Cairo',sans-serif;color:var(--txt);background:radial-gradient(circle at 20% 0%,#7d2a48 0,var(--bg1) 40%,var(--bg2) 100%) fixed;line-height:1.7}
+/* splash */
+#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(circle at 50% 30%,#7d2a48,#2e0c1c);transition:opacity .8s}
+#splash.hide{opacity:0;pointer-events:none}
+#splash .bism{font-family:'Amiri Quran',serif;color:var(--gold2);font-size:1.6rem;margin-bottom:18px;opacity:0;animation:fade 1.5s .2s forwards}
+#splash .ayah{font-family:'Amiri Quran',serif;font-size:clamp(2rem,6vw,3.8rem);color:var(--gold);line-height:2.1;max-width:900px;opacity:0;animation:fade 2s .8s forwards;text-shadow:0 2px 20px #0008}
+#splash button{margin-top:30px;opacity:0;animation:fade 1s 2.6s forwards}
+@keyframes fade{to{opacity:1}}
+button,select{font-family:inherit;font-size:1rem}
+.btn{background:linear-gradient(#f7dc94,#e0aa4c);color:#4a1428;border:0;padding:10px 26px;border-radius:30px;font-weight:800;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn.sm{padding:6px 16px;font-size:.9rem}
+.btn.ghost{background:transparent;color:var(--gold);border:1.5px solid var(--gold2)}
+/* ticker */
+.ticker{position:sticky;top:0;z-index:50;background:#2a0b1a;border-bottom:3px solid var(--gold2);overflow:hidden;white-space:nowrap;padding:10px 0}
+.ticker .track{display:inline-block;padding-right:100%;animation:scroll 110s linear infinite}
+.ticker:hover .track{animation-play-state:paused}
+.ticker span{font-family:'Amiri',serif;font-weight:700;font-size:1.45rem;color:var(--gold);margin:0 22px}
+.ticker i{color:#ff9fbd;font-style:normal;font-size:1.2rem}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(100%)}}
+header{text-align:center;padding:26px 16px 8px}
+header h1{font-family:'Amiri Quran',serif;font-size:2.6rem;color:var(--gold);text-shadow:0 2px 12px #0006}
+header p{color:#f3c6d4}
+nav{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0}
+nav button{background:var(--card2);color:var(--txt);border:1.5px solid var(--line);padding:10px 28px;border-radius:30px;cursor:pointer;font-weight:700}
+nav button.on{background:linear-gradient(#f7dc94,#e0aa4c);color:#4a1428;border-color:var(--gold)}
+main{max-width:1000px;margin:0 auto;padding:0 14px 60px}
+section{display:none}section.on{display:block}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;background:var(--card2);border:1px solid var(--line);padding:12px;border-radius:16px;margin-bottom:16px}
+select{background:#4a1428;color:var(--txt);border:1px solid var(--gold2);padding:8px 12px;border-radius:10px;max-width:100%}
+label{font-size:.95rem;color:#f3c6d4}
+/* mushaf */
+.mushaf{background:#fbf1de;color:#231016;border:8px double #b98a3c;border-radius:14px;padding:34px 30px;box-shadow:0 14px 40px #0008,inset 0 0 60px #e9cf9c;min-height:300px}
+.mushaf .sname{text-align:center;font-family:'Amiri Quran',serif;font-size:2.2rem;color:#7a2445;border:2px solid #b98a3c;border-radius:10px;padding:4px;margin-bottom:14px;background:#f3dfb4}
+.mushaf .bismillah{text-align:center;font-family:'Amiri Quran',serif;font-size:2rem;margin-bottom:10px}
+.mushaf .text{font-family:'Amiri Quran',serif;text-align:justify;text-align-last:center;line-height:2.6}
+.ayah{cursor:pointer;border-radius:6px;transition:.2s}
+.ayah:hover{background:#f0d9a2}
+.ayah.cur{background:#f4b6c9;box-shadow:0 0 0 3px #f4b6c9}
+.num{color:#9b6b1e;font-size:.8em;margin:0 4px}
+.pager{display:flex;justify-content:space-between;margin-top:14px}
+/* listening */
+.player{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center;margin-bottom:16px}
+.player h3{font-family:'Amiri Quran',serif;color:var(--gold);font-size:1.8rem}
+audio{width:100%;margin:10px 0;border-radius:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.grid button{background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer;font-family:'Amiri',serif;font-size:1.1rem}
+.grid button:hover,.grid button.on{background:var(--gold2);color:#4a1428}
+.grid small{display:block;font-family:'Cairo';font-size:.7rem;opacity:.8}
+/* memorize */
+.mem{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:22px;font-family:'Amiri Quran',serif;font-size:1.9rem;line-height:2.5;text-align:center}
+.mem .ayah{padding:2px 4px}
+.mem.hidden .ayah:not(.show){filter:blur(9px)}
+.mem .ayah.cur{background:#a3436a;box-shadow:none;color:#fff}
+.mem .ayah:hover{background:#8b3558}
+.status{text-align:center;color:var(--gold);margin:8px;min-height:1.6em}
+footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
+@media(max-width:600px){.mushaf{padding:20px 14px}.ticker span{font-size:1.2rem}}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="bism">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <div class="ayah">﴿ وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍ ﴾</div>
+  <button class="btn" onclick="enter()">ادخل</button>
+</div>
+
+<div class="ticker"><div class="track" id="track"></div></div>
+
+<header>
+  <h1>القرآن الكريم</h1>
+  <p>اقرأ • استمع • احفظ</p>
+</header>
+
+<nav>
+  <button class="on" data-t="read">📖 القراءة</button>
+  <button data-t="listen">🎧 الاستماع</button>
+  <button data-t="mem">🌙 التحفيظ</button>
+</nav>
+
+<main>
+<!-- القراءة -->
+<section id="read" class="on">
+  <div class="bar">
+    <label>السورة</label><select id="rSurah"></select>
+    <label>حجم الخط</label>
+    <button class="btn sm ghost" onclick="fs(-2)">A-</button>
+    <button class="btn sm ghost" onclick="fs(2)">A+</button>
+  </div>
+  <div class="mushaf" id="mushaf">جاري التحميل…</div>
+  <div class="pager">
+    <button class="btn sm" onclick="goSurah(1)">← السورة التالية</button>
+    <button class="btn sm" onclick="goSurah(-1)">السورة السابقة →</button>
+  </div>
+</section>
+
+<!-- الاستماع -->
+<section id="listen">
+  <div class="bar">
+    <label>القارئ</label><select id="lReciter"></select>
+  </div>
+  <div class="player">
+    <h3 id="nowPlaying">اختر سورة للاستماع</h3>
+    <audio id="aud" controls></audio>
+    <div class="status" id="lStatus"></div>
+    <button class="btn sm" onclick="stepListen(-1)">→ السابقة</button>
+    <button class="btn sm" onclick="stepListen(1)">التالية ←</button>
+  </div>
+  <div class="grid" id="lGrid"></div>
+</section>
+
+<!-- التحفيظ -->
+<section id="mem">
+  <div class="bar">
+    <label>السورة</label><select id="mSurah"></select>
+    <label>من آية</label><select id="mFrom"></select>
+    <label>إلى آية</label><select id="mTo"></select>
+  </div>
+  <div class="bar">
+    <label>القارئ</label><select id="mReciter"></select>
+    <label>تكرار كل آية</label>
+    <select id="mRep"><option>1</option><option>2</option><option selected>3</option><option>5</option><option>10</option></select>
+    <label><input type="checkbox" id="mLoop"> إعادة المقطع</label>
+    <label><input type="checkbox" id="mHide"> إخفاء النص (اختبر حفظك)</label>
+  </div>
+  <div style="text-align:center;margin-bottom:12px">
+    <button class="btn" onclick="memPlay()">▶ ابدأ</button>
+    <button class="btn ghost" onclick="memStop()">■ إيقاف</button>
+  </div>
+  <div class="status" id="mStatus"></div>
+  <div class="mem" id="memBox">اختر السورة…</div>
+  <p style="text-align:center;margin-top:10px;color:#f3c6d4;font-size:.9rem">نصيحة: كرر الآية حتى تحفظها، ثم أخفِ النص واختبر نفسك. اضغط على أي آية لتبدأ منها.</p>
+</section>
+</main>
+
+<footer>﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾ — جعلنا الله وإياكم من أهل القرآن</footer>
+<audio id="mAud"></audio>
+
+<script>
+const $=id=>document.getElementById(id);
+const pad=(n,l=3)=>String(n).padStart(l,'0');
+
+/* الشريط المتحرك */
+const TICKER=[
+ ['﴿ إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ ﴾','الإسراء ٩'],
+ ['«خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ»','رواه البخاري'],
+ ['﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾','الحجر ٩'],
+ ['«إِنَّ لِلَّهِ أَهْلِينَ مِنَ النَّاسِ، هُمْ أَهْلُ الْقُرْآنِ، أَهْلُ اللَّهِ وَخَاصَّتُهُ»','رواه ابن ماجه وأحمد'],
+ ['﴿ أَفَلَا يَتَدَبَّرُونَ الْقُرْآنَ أَمْ عَلَىٰ قُلُوبٍ أَقْفَالُهَا ﴾','محمد ٢٤'],
+ ['«اقْرَءُوا الْقُرْآنَ فَإِنَّهُ يَأْتِي يَوْمَ الْقِيَامَةِ شَفِيعًا لِأَصْحَابِهِ»','رواه مسلم'],
+ ['﴿ وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ لِّلْمُؤْمِنِينَ ﴾','الإسراء ٨٢'],
+ ['«الْمَاهِرُ بِالْقُرْآنِ مَعَ السَّفَرَةِ الْكِرَامِ الْبَرَرَةِ»','متفق عليه'],
+ ['﴿ الَّذِينَ آتَيْنَاهُمُ الْكِتَابَ يَتْلُونَهُ حَقَّ تِلَاوَتِهِ ﴾','البقرة ١٢١'],
+ ['«مَنْ قَرَأَ حَرْفًا مِنْ كِتَابِ اللَّهِ فَلَهُ بِهِ حَسَنَةٌ وَالْحَسَنَةُ بِعَشْرِ أَمْثَالِهَا»','رواه الترمذي'],
+ ['﴿ وَنَزَّلْنَا عَلَيْكَ الْكِتَابَ تِبْيَانًا لِّكُلِّ شَيْءٍ ﴾','النحل ٨٩'],
+ ['«يُقَالُ لِصَاحِبِ الْقُرْآنِ: اقْرَأْ وَارْتَقِ وَرَتِّلْ كَمَا كُنْتَ تُرَتِّلُ فِي الدُّنْيَا»','رواه أبو داود والترمذي']
+];
+$('track').innerHTML=[...TICKER,...TICKER].map(t=>`<span>${t[0]} <i>(${t[1]})</i></span><span style="color:#ff9fbd">✦</span>`).join('');
+
+/* القراء */
+const RECITERS=[
+ {n:'عبدالباسط عبد الصمد',s:'https://server7.mp3quran.net/basit/',e:'Abdul_Basit_Murattal_192kbps'},
+ {n:'محمود خليل الحصري',s:'https://server13.mp3quran.net/husr/',e:'Husary_128kbps'},
+ {n:'ياسر الدوسري',s:'https://server11.mp3quran.net/yasser/',e:'Yasser_Ad-Dussary_128kbps'},
+ {n:'سعد الغامدي',s:'https://server7.mp3quran.net/s_gmd/',e:'Ghamadi_40kbps'},
+ {n:'مشاري العفاسي',s:'https://server8.mp3quran.net/afs/',e:'Alafasy_128kbps'},
+ {n:'عبدالرحمن السديس',s:'https://server11.mp3quran.net/sds/',e:'Abdurrahmaan_As-Sudais_192kbps'},
+ {n:'سعود الشريم',s:'https://server7.mp3quran.net/shur/',e:'Saood_ash-Shuraym_128kbps'},
+ {n:'وديع اليمني',s:'https://server6.mp3quran.net/wdee/',e:null}
+];
+fetch('https://mp3quran.net/api/v3/reciters?language=ar').then(r=>r.json()).then(d=>{
+  const w=d.reciters.find(x=>x.name.includes('وديع'));
+  if(w&&w.moshaf&&w.moshaf[0]) RECITERS[7].s=w.moshaf[0].server.replace(/\/?$/,'/');
+}).catch(()=>{});
+const recOpts=RECITERS.map((r,i)=>`<option value="${i}">${r.n}</option>`).join('');
+$('lReciter').innerHTML=recOpts;$('mReciter').innerHTML=recOpts;
+$('mReciter').value=4;
+
+/* التبويبات */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));$(b.dataset.t).classList.add('on');
+});
+function enter(){$('splash').classList.add('hide');setTimeout(()=>$('splash').remove(),900)}
+
+/* بيانات السور */
+let SURAHS=[],cache={};
+async function getSurah(n){
+  if(cache[n])return cache[n];
+  const r=await fetch(`https://api.alquran.cloud/v1/surah/${n}/quran-uthmani`);
+  const d=(await r.json()).data;
+  const bism=d.ayahs[0].text.split(' ').slice(0,4).join(' ');
+  d.ayahs=d.ayahs.map((a,i)=>({n:a.numberInSurah,t:(i===0&&n!==1&&n!==9&&a.text.startsWith(bism))?a.text.split(' ').slice(4).join(' '):a.text}));
+  return cache[n]=d;
+}
+async function init(){
+  try{
+    SURAHS=(await(await fetch('https://api.alquran.cloud/v1/surah')).json()).data;
+  }catch(e){$('mushaf').textContent='تعذر تحميل البيانات. تأكد من اتصال الإنترنت.';return}
+  const opts=SURAHS.map(s=>`<option value="${s.number}">${s.number}. ${s.name}</option>`).join('');
+  $('rSurah').innerHTML=opts;$('mSurah').innerHTML=opts;
+  $('lGrid').innerHTML=SURAHS.map(s=>`<button data-n="${s.number}" onclick="playSurah(${s.number})">${s.name}<small>${s.numberOfAyahs} آية • ${s.revelationType==='Meccan'?'مكية':'مدنية'}</small></button>`).join('');
+  loadRead(1);setMemSurah(1);
+}
+init();
+
+/* القراءة */
+let size=2.1,curSurah=1;
+function fs(d){size=Math.max(1.3,Math.min(3.6,size+d/10));$('mushaf').querySelector('.text').style.fontSize=size+'rem'}
+async function loadRead(n){
+  curSurah=n;$('rSurah').value=n;$('mushaf').textContent='جاري التحميل…';
+  const s=await getSurah(n);
+  $('mushaf').innerHTML=`<div class="sname">${s.name}</div>${(n!==1&&n!==9)?'<div class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>':''}<div class="text" style="font-size:${size}rem">${s.ayahs.map(a=>`<span class="ayah" onclick="readAyah(${n},${a.n},this)">${a.t} <span class="num">﴿${a.n.toLocaleString('ar-EG')}﴾</span></span>`).join(' ')}</div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+$('rSurah').onchange=e=>loadRead(+e.target.value);
+function goSurah(d){const n=curSurah+d;if(n>=1&&n<=114)loadRead(n)}
+function readAyah(s,a,el){ /* اضغط على آية لسماعها */
+  document.querySelectorAll('#mushaf .ayah.cur').forEach(x=>x.classList.remove('cur'));el.classList.add('cur');
+  const r=RECITERS[$('mReciter').value]||RECITERS[4];
+  const folder=r.e||RECITERS[4].e;
+  const au=$('mAud');au.src=`https://everyayah.com/data/${folder}/${pad(s)}${pad(a)}.mp3`;au.play().catch(()=>{});
+}
+
+/* الاستماع */
+let curL=null;const aud=$('aud');
+function playSurah(n){
+  curL=n;const r=RECITERS[$('lReciter').value];
+  aud.src=`${r.s}${pad(n)}.mp3`;aud.play().catch(()=>{});
+  $('nowPlaying').textContent=`سورة ${SURAHS[n-1].name} — ${r.n}`;$('lStatus').textContent='';
+  document.querySelectorAll('#lGrid button').forEach(b=>b.classList.toggle('on',+b.dataset.n===n));
+}
+function stepListen(d){const n=(curL||0)+d;if(n>=1&&n<=114)playSurah(n)}
+aud.onended=()=>stepListen(1);
+aud.onerror=()=>{if(aud.src)$('lStatus').textContent='تعذر تشغيل الصوت لهذا القارئ/السورة، جرّب قارئاً آخر.'};
+$('lReciter').onchange=()=>{if(curL)playSurah(curL)};
+
+/* التحفيظ */
+let mS=1,mA=[],mIdx=0,mRep=0,mRun=false;
+async function setMemSurah(n){
+  mS=n;memStop();const s=await getSurah(n);mA=s.ayahs;
+  const o=mA.map(a=>`<option value="${a.n}">${a.n}</option>`).join('');
+  $('mFrom').innerHTML=o;$('mTo').innerHTML=o;$('mTo').value=Math.min(mA.length,5);
+  renderMem();
+}
+function renderMem(cur){
+  $('memBox').innerHTML=mA.map(a=>`<span class="ayah ${a.n===cur?'cur show':''}" data-n="${a.n}" onclick="memJump(${a.n},this)">${a.t} <span class="num" style="color:#f7dc94">﴿${a.n.toLocaleString('ar-EG')}﴾</span></span>`).join(' ');
+  $('memBox').classList.toggle('hidden',$('mHide').checked);
+}
+$('mSurah').onchange=e=>setMemSurah(+e.target.value);
+$('mHide').onchange=()=>renderMem();
+function memPlay(){mRun=true;mIdx=+$('mFrom').value;mRep=0;memNext(true)}
+function memJump(n,el){$('mFrom').value=n;if(+$('mTo').value<n)$('mTo').value=n;el.classList.add('show');memPlay()}
+function memStop(){mRun=false;const a=$('mAud');a.pause();$('mStatus').textContent=''}
+function memNext(first){
+  if(!mRun)return;
+  const to=+$('mTo').value,from=+$('mFrom').value,reps=+$('mRep').value;
+  if(!first){mRep++;if(mRep>=reps){mRep=0;mIdx++}}
+  if(mIdx>to){if($('mLoop').checked){mIdx=from;mRep=0}else{memStop();$('mStatus').textContent='✔ انتهى المقطع، بارك الله فيك';return}}
+  const r=RECITERS[$('mReciter').value];let folder=r.e,note='';
+  if(!folder){folder=RECITERS[4].e;note=' (بصوت العفاسي — التحفيظ آية بآية غير متوفر لهذا القارئ)'}
+  renderMem(mIdx);
+  const cur=$('memBox').querySelector('.cur');if(cur)cur.scrollIntoView({block:'center',behavior:'smooth'});
+  $('mStatus').textContent=`الآية ${mIdx} — التكرار ${mRep+1} من ${reps}${note}`;
+  const a=$('mAud');a.src=`https://everyayah.com/data/${folder}/${pad(mS)}${pad(mIdx)}.mp3`;
+  a.onended=()=>setTimeout(()=>memNext(false),600);
+  a.onerror=()=>{memStop();$('mStatus').textContent='تعذر تحميل الصوت، جرّب قارئاً آخر.'};
+  a.play().catch(()=>{});
+}
+</script>
+</body>
+</html>
