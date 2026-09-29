@@ -67,6 +67,33 @@ audio{width:100%;margin:10px 0;border-radius:30px}
 .mem .ayah:hover{background:#8b3558}
 .status{text-align:center;color:var(--gold);margin:8px;min-height:1.6em}
 footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
+/* book */
+.bookwrap{position:relative;max-width:980px;margin:0 auto}
+.book{position:relative;display:flex;perspective:2400px;padding:12px;border-radius:12px;background:linear-gradient(#6b2a44,#3f1327);box-shadow:0 18px 50px #000a;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.pg{position:relative;flex:1;aspect-ratio:.7;display:flex;flex-direction:column;padding:24px 22px 16px;background:linear-gradient(90deg,#f3e2bd,#fbf1de 35%,#fbf1de 65%,#f3e2bd);color:#231016;overflow:hidden;transition:opacity .18s}
+.pg::before{content:"";position:absolute;inset:9px;border:3px double #b98a3c;pointer-events:none}
+.pg.R{border-radius:0 6px 6px 0;box-shadow:inset 28px 0 26px -20px #0009}
+.pg.L{border-radius:6px 0 0 6px;box-shadow:inset -28px 0 26px -20px #0009}
+.ph{position:relative;z-index:1;display:flex;justify-content:space-between;font-family:'Amiri',serif;font-weight:700;color:#7a2445;padding:0 8px 4px;border-bottom:1px solid #d5b06a;margin-bottom:6px}
+.pt{position:relative;z-index:1;flex:1;min-height:0;overflow:hidden;font-family:'Amiri Quran',serif;text-align:justify;text-align-last:center;line-height:1.9;padding:0 6px}
+.pt.c{display:flex;flex-direction:column;justify-content:center;text-align:center}
+.pt .sb{text-align:center;color:#7a2445;border:2px solid #b98a3c;border-radius:8px;background:#f3dfb4;margin:4px 0;font-size:1.15em;line-height:1.6}
+.pt .bs{text-align:center;line-height:1.7}
+.pn{position:relative;z-index:1;text-align:center;font-family:'Amiri',serif;font-weight:700;color:#7a2445;padding-top:4px}
+.book.single .pg.L{display:none}
+.book.single .pg.R{border-radius:6px;max-width:540px;margin:0 auto;box-shadow:none}
+.flip{position:absolute;top:12px;bottom:12px;width:calc(50% - 12px);transform-style:preserve-3d;transition:transform .8s cubic-bezier(.45,.05,.3,1);z-index:5}
+.flip.fl{left:12px;transform-origin:right center}
+.flip.fr{right:12px;transform-origin:left center}
+.flip .pg{position:absolute;inset:0;aspect-ratio:auto;backface-visibility:hidden}
+.flip .b{transform:rotateY(180deg)}
+.edge{position:absolute;top:50%;transform:translateY(-50%);z-index:8;width:44px;height:44px;border-radius:50%;border:0;background:#f7dc94;color:#4a1428;font-size:1.7rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 4px 14px #0008}
+.edge.el{left:-10px}.edge.er{right:-10px}
+/* ayah audio */
+.ay{cursor:pointer;border-radius:6px;transition:background .2s}
+.ay:hover{background:#f0d9a2}
+.ay.cur{background:#f4b6c9;box-shadow:0 0 0 3px #f4b6c9}
+input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px solid var(--gold2);padding:8px;border-radius:10px;font-family:inherit;font-size:1rem}
 @media(max-width:600px){.mushaf{padding:20px 14px}.ticker span{font-size:1.2rem}}
 </style>
 </head>
@@ -87,6 +114,7 @@ footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
 
 <nav>
   <button class="on" data-t="read">📖 القراءة</button>
+  <button data-t="book">📜 المصحف</button>
   <button data-t="listen">🎧 الاستماع</button>
   <button data-t="mem">🌙 التحفيظ</button>
 </nav>
@@ -120,6 +148,22 @@ footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
     <button class="btn sm" onclick="stepListen(1)">التالية ←</button>
   </div>
   <div class="grid" id="lGrid"></div>
+</section>
+
+<!-- المصحف -->
+<section id="book">
+  <div class="bar">
+    <label>السورة</label><select id="bSurah"></select>
+    <label>القارئ</label><select id="bReciter"></select>
+    <label>الصفحة</label><input type="number" id="bPage" min="1" max="604" value="1">
+  </div>
+  <div class="bookwrap">
+    <div class="book" id="bk"><div class="pg R" id="pR"></div><div class="pg L" id="pL"></div></div>
+    <button class="edge el" onclick="turn(1)" title="الصفحة التالية">‹</button>
+    <button class="edge er" onclick="turn(-1)" title="الصفحة السابقة">›</button>
+  </div>
+  <div class="status" id="bInfo"></div>
+  <div class="status" style="font-size:.85rem;opacity:.8">اسحب بالماوس أو الإصبع، أو استخدم أسهم لوحة المفاتيح ← →</div>
 </section>
 
 <!-- التحفيظ -->
@@ -192,7 +236,7 @@ $('mReciter').value=4;
 /* التبويبات */
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));$(b.dataset.t).classList.add('on');
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));$(b.dataset.t).classList.add('on');if(b.dataset.t==='book')bookShow();
 });
 function enter(){$('splash').classList.add('hide');setTimeout(()=>$('splash').remove(),900)}
 
@@ -203,7 +247,7 @@ async function getSurah(n){
   const r=await fetch(`https://api.alquran.cloud/v1/surah/${n}/quran-uthmani`);
   const d=(await r.json()).data;
   const bism=d.ayahs[0].text.split(' ').slice(0,4).join(' ');
-  d.ayahs=d.ayahs.map((a,i)=>({n:a.numberInSurah,t:(i===0&&n!==1&&n!==9&&a.text.startsWith(bism))?a.text.split(' ').slice(4).join(' '):a.text}));
+  d.ayahs=d.ayahs.map((a,i)=>({n:a.numberInSurah,p:a.page,t:(i===0&&n!==1&&n!==9&&a.text.startsWith(bism))?a.text.split(' ').slice(4).join(' '):a.text}));
   return cache[n]=d;
 }
 async function init(){
@@ -211,7 +255,7 @@ async function init(){
     SURAHS=(await(await fetch('https://api.alquran.cloud/v1/surah')).json()).data;
   }catch(e){$('mushaf').textContent='تعذر تحميل البيانات. تأكد من اتصال الإنترنت.';return}
   const opts=SURAHS.map(s=>`<option value="${s.number}">${s.number}. ${s.name}</option>`).join('');
-  $('rSurah').innerHTML=opts;$('mSurah').innerHTML=opts;
+  $('rSurah').innerHTML=opts;$('mSurah').innerHTML=opts;$('bSurah').innerHTML=opts;
   $('lGrid').innerHTML=SURAHS.map(s=>`<button data-n="${s.number}" onclick="playSurah(${s.number})">${s.name}<small>${s.numberOfAyahs} آية • ${s.revelationType==='Meccan'?'مكية':'مدنية'}</small></button>`).join('');
   loadRead(1);setMemSurah(1);
 }
@@ -229,6 +273,7 @@ async function loadRead(n){
 $('rSurah').onchange=e=>loadRead(+e.target.value);
 function goSurah(d){const n=curSurah+d;if(n>=1&&n<=114)loadRead(n)}
 function readAyah(s,a,el){ /* اضغط على آية لسماعها */
+  memStop();
   document.querySelectorAll('#mushaf .ayah.cur').forEach(x=>x.classList.remove('cur'));el.classList.add('cur');
   const r=RECITERS[$('mReciter').value]||RECITERS[4];
   const folder=r.e||RECITERS[4].e;
@@ -280,6 +325,109 @@ function memNext(first){
   a.onerror=()=>{memStop();$('mStatus').textContent='تعذر تحميل الصوت، جرّب قارئاً آخر.'};
   a.play().catch(()=>{});
 }
+
+/* المصحف */
+const TP=604,PR=$('pR'),PL=$('pL'),BK=$('bk');
+let cur=1,busy=false,bReady=false,pc={};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const ar=n=>n.toLocaleString('ar-EG');
+const spread=()=>innerWidth>=820;
+async function getPage(n){
+  if(pc[n])return pc[n];
+  const r=await fetch(`https://api.alquran.cloud/v1/page/${n}/quran-uthmani`);
+  return pc[n]=(await r.json()).data.ayahs;
+}
+function fit(el){
+  const t=el.querySelector('.pt');if(!t||!t.clientHeight)return;
+  let f=Math.min(el.clientWidth/15,34);t.style.fontSize=f+'px';
+  while(t.scrollHeight>t.clientHeight+1&&f>10){f-=.5;t.style.fontSize=f+'px'}
+}
+async function fill(el,n){
+  el.dataset.p=n;
+  if(n<1||n>TP){el.innerHTML='';return}
+  let ay;try{ay=await getPage(n)}catch(e){el.innerHTML='<div class="pt c">تعذر تحميل الصفحة، تأكد من الاتصال</div>';return}
+  let h='';
+  ay.forEach(a=>{
+    let t=a.text;
+    if(a.numberInSurah===1){
+      h+=`<div class="sb">${a.surah.name}</div>`;
+      if(a.surah.number!==1&&a.surah.number!==9){h+='<div class="bs">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';t=t.split(' ').slice(4).join(' ')}
+    }
+    h+=`<span class="ay" data-s="${a.surah.number}" data-a="${a.numberInSurah}" onclick="bookAyah(this)">${t} <span class="num">﴿${ar(a.numberInSurah)}﴾</span></span> `;
+  });
+  el.innerHTML=`<div class="ph"><span>${ay[0].surah.name}</span><span>الجزء ${ar(ay[0].juz)}</span></div><div class="pt${n<3?' c':''}">${h}</div><div class="pn">${ar(n)}</div>`;
+  fit(el);
+}
+function info(){
+  $('bPage').value=cur;
+  $('bInfo').textContent=spread()?`صفحة ${ar(cur)} – ${ar(Math.min(cur+1,TP))} من ${ar(TP)}`:`صفحة ${ar(cur)} من ${ar(TP)}`;
+  try{localStorage.setItem('bp',cur)}catch(e){}
+  [cur+2,cur+3].forEach(n=>{if(n<=TP)getPage(n).catch(()=>{})});
+}
+async function show(){
+  const sp=spread();BK.classList.toggle('single',!sp);
+  if(sp&&cur%2===0)cur--;
+  await Promise.all([fill(PR,cur),sp?fill(PL,cur+1):0]);
+  info();
+}
+async function bookShow(){
+  if(!bReady){bReady=true;try{cur=+localStorage.getItem('bp')||1}catch(e){}}
+  try{await document.fonts.load('24px "Amiri Quran"')}catch(e){}
+  show();
+}
+function go(n){if(busy)return;cur=Math.max(1,Math.min(TP,Math.round(n)||1));show()}
+async function turn(d){
+  if(busy)return;
+  const sp=spread(),n=cur+d*(sp?2:1);
+  if(n<1||n>TP)return;
+  busy=true;
+  if(!sp){PR.style.opacity=0;await sleep(180);cur=n;await fill(PR,n);PR.style.opacity=1;info();busy=false;return}
+  const fw=d>0,src=fw?PL:PR,fl=document.createElement('div');
+  fl.className='flip '+(fw?'fl':'fr');
+  const f=src.cloneNode(true),b=document.createElement('div');
+  b.className='pg b '+(fw?'R':'L');
+  fl.append(f,b);BK.append(fl);
+  await Promise.all([fill(b,fw?n:n+1),fill(fw?PL:PR,fw?n+1:n)]);
+  void fl.offsetWidth;
+  fl.style.transform=`rotateY(${fw?180:-180}deg)`;
+  await sleep(850);
+  await fill(fw?PR:PL,fw?n:n+1);
+  fl.remove();cur=n;info();busy=false;
+}
+$('bReciter').innerHTML=recOpts;$('bReciter').value=4;
+let dragged=false;
+function bookAyah(el){
+  if(dragged)return;
+  memStop();aud.pause();playBook(el);
+}
+function playBook(el){
+  document.querySelectorAll('#book .ay.cur').forEach(x=>x.classList.remove('cur'));
+  el.classList.add('cur');
+  const r=RECITERS[$('bReciter').value]||RECITERS[4],folder=r.e||RECITERS[4].e,au=$('mAud');
+  au.src=`https://everyayah.com/data/${folder}/${pad(el.dataset.s)}${pad(el.dataset.a)}.mp3`;
+  au.onended=()=>{
+    if(!el.isConnected){return}
+    const all=[...document.querySelectorAll('#pR .ay,#pL .ay')],nx=all[all.indexOf(el)+1];
+    if(nx)playBook(nx);else el.classList.remove('cur');
+  };
+  au.onerror=()=>el.classList.remove('cur');
+  au.play().catch(()=>{});
+}
+$('bPage').onchange=e=>go(+e.target.value);
+$('bSurah').onchange=async e=>go((await getSurah(+e.target.value)).ayahs[0].p);
+document.addEventListener('keydown',e=>{
+  if(!$('book').classList.contains('on')||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.key==='ArrowLeft')turn(1);else if(e.key==='ArrowRight')turn(-1);
+});
+let sx=null;
+BK.onpointerdown=e=>{sx=e.clientX};
+BK.onpointerup=e=>{if(sx===null)return;const dx=e.clientX-sx;sx=null;dragged=Math.abs(dx)>10;setTimeout(()=>dragged=false,50);if(Math.abs(dx)>50)turn(dx>0?1:-1)};
+let rw=spread();
+addEventListener('resize',()=>{if(spread()!==rw){rw=spread();if($('book').classList.contains('on'))show()}});
+
+/* تشغيل واحد فقط في كل مرة */
+aud.addEventListener('play',()=>{if(mRun||!$('mAud').paused)memStop()});
+$('mAud').addEventListener('play',()=>{if(!aud.paused)aud.pause()});
 </script>
 </body>
 </html>
