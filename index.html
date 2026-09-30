@@ -105,6 +105,8 @@ footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
 .cf input,.cf textarea,.cf select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--gold2);background:#4a1428;color:var(--txt);font-family:inherit;font-size:1rem}
 .cf textarea{min-height:96px;resize:vertical}
 .cf .hp{position:absolute;top:0;inset-inline-start:0;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+.stopfab{position:fixed;bottom:20px;left:16px;z-index:150;background:var(--gold);color:#4a1428;border:0;border-radius:30px;padding:12px 20px;font-family:inherit;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 8px 24px #000a}
+.stopfab[hidden]{display:none}
 /* tafsir + english */
 .book{direction:rtl}
 .inst+.inst{margin-inline-start:6px}
@@ -189,6 +191,7 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
     <label>حجم الخط</label>
     <button class="btn sm ghost" onclick="fs(-2)">A-</button>
     <button class="btn sm ghost" onclick="fs(2)">A+</button>
+    <button class="btn sm ghost" id="rSnd" onclick="rSound()"></button>
   </div>
   <div class="mushaf" id="mushaf">جاري التحميل…</div>
   <div class="pager">
@@ -283,6 +286,7 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
   </div>
 </div>
 
+<button class="stopfab" id="bStop" hidden onclick="bookStop()">⏹ إيقاف الصوت</button>
 <audio id="mAud"></audio>
 
 <script>
@@ -315,11 +319,18 @@ const RECITERS=[
  {n:'مشاري العفاسي',s:'https://server8.mp3quran.net/afs/',e:'Alafasy_128kbps'},
  {n:'عبدالرحمن السديس',s:'https://server11.mp3quran.net/sds/',e:'Abdurrahmaan_As-Sudais_192kbps'},
  {n:'سعود الشريم',s:'https://server7.mp3quran.net/shur/',e:'Saood_ash-Shuraym_128kbps'},
- {n:'وديع اليمني',s:'https://server6.mp3quran.net/wdee/',e:null}
+ {n:'وديع اليمني',s:'https://server6.mp3quran.net/wdee/',e:null},
+ {n:'أنس العمادي',s:null,e:null},
+ {n:'محمد أيوب',s:null,e:'Muhammad_Ayyoub_128kbps'}
 ];
 fetch('https://mp3quran.net/api/v3/reciters?language=ar').then(r=>r.json()).then(d=>{
-  const w=d.reciters.find(x=>x.name.includes('وديع'));
-  if(w&&w.moshaf&&w.moshaf[0]) RECITERS[7].s=w.moshaf[0].server.replace(/\/?$/,'/');
+  [[7,/وديع/],[8,/العمادي/],[9,/محمد\s*[أا]يوب/]].forEach(([i,re])=>{
+    const w=d.reciters.find(x=>re.test(x.name));
+    if(!w||!w.moshaf||!w.moshaf.length)return;
+    const m=w.moshaf.find(k=>k.surah_total>=114)||w.moshaf[0];
+    RECITERS[i].s=m.server.replace(/\/?$/,'/');
+    if(m.surah_list&&m.surah_total<114)RECITERS[i].l=new Set(m.surah_list.split(',').map(Number));
+  });
 }).catch(()=>{});
 const recOpts=RECITERS.map((r,i)=>`<option value="${i}">${r.n}</option>`).join('');
 $('lReciter').innerHTML=recOpts;$('mReciter').innerHTML=recOpts;
@@ -365,8 +376,9 @@ async function loadRead(n){
 $('rSurah').onchange=e=>loadRead(+e.target.value);
 function goSurah(d){const n=curSurah+d;if(n>=1&&n<=114)loadRead(n)}
 function readAyah(s,a,el){ /* اضغط على آية لسماعها */
-  memStop();
   document.querySelectorAll('#mushaf .ayah.cur').forEach(x=>x.classList.remove('cur'));el.classList.add('cur');
+  if(!rSnd)return;
+  memStop();
   const r=RECITERS[$('mReciter').value]||RECITERS[4];
   const folder=r.e||RECITERS[4].e;
   const au=$('mAud');au.src=`https://everyayah.com/data/${folder}/${pad(s)}${pad(a)}.mp3`;au.play().catch(()=>{});
@@ -376,11 +388,13 @@ function readAyah(s,a,el){ /* اضغط على آية لسماعها */
 let curL=null;const aud=$('aud');
 function playSurah(n){
   curL=n;const r=RECITERS[$('lReciter').value];
+  if(!r.s){$('lStatus').textContent='جاري تحميل بيانات هذا القارئ، حاول بعد لحظات أو اختر قارئاً آخر.';return}
+  if(r.l&&!r.l.has(n)){$('lStatus').textContent='هذه السورة غير متوفرة لهذا القارئ، جرّب قارئاً آخر.';return}
   aud.src=`${r.s}${pad(n)}.mp3`;aud.play().catch(()=>{});
   $('nowPlaying').textContent=`سورة ${SURAHS[n-1].name} — ${r.n}`;$('lStatus').textContent='';
   document.querySelectorAll('#lGrid button').forEach(b=>b.classList.toggle('on',+b.dataset.n===n));
 }
-function stepListen(d){const n=(curL||0)+d;if(n>=1&&n<=114)playSurah(n)}
+function stepListen(d){let n=(curL||0)+d;const r=RECITERS[$('lReciter').value];while(n>=1&&n<=114&&r.l&&!r.l.has(n))n+=d;if(n>=1&&n<=114)playSurah(n)}
 aud.onended=()=>stepListen(1);
 aud.onerror=()=>{if(aud.src)$('lStatus').textContent='تعذر تشغيل الصوت لهذا القارئ/السورة، جرّب قارئاً آخر.'};
 $('lReciter').onchange=()=>{if(curL)playSurah(curL)};
@@ -499,12 +513,12 @@ function playBook(el){
   const r=RECITERS[$('bReciter').value]||RECITERS[4],folder=r.e||RECITERS[4].e,au=$('mAud');
   au.src=`https://everyayah.com/data/${folder}/${pad(el.dataset.s)}${pad(el.dataset.a)}.mp3`;
   au.onended=()=>{
-    if(!el.isConnected){return}
+    if(!el.isConnected){bStopUI(false);return}
     const all=[...document.querySelectorAll('#pR .ay,#pL .ay')],nx=all[all.indexOf(el)+1];
-    if(nx)playBook(nx);else el.classList.remove('cur');
+    if(nx)playBook(nx);else{el.classList.remove('cur');bStopUI(false)}
   };
-  au.onerror=()=>el.classList.remove('cur');
-  au.play().catch(()=>{});
+  au.onerror=()=>{el.classList.remove('cur');bStopUI(false)};
+  au.play().then(()=>bStopUI(true)).catch(()=>bStopUI(false));
 }
 $('bPage').onchange=e=>go(+e.target.value);
 $('bSurah').onchange=async e=>go((await getSurah(+e.target.value)).ayahs[0].p);
@@ -696,7 +710,7 @@ function tafStep(d){
 }
 
 /* التواصل: نموذج مجاني عبر Web3Forms (البريد لا يظهر في الموقع) */
-const W3F_KEY='PASTE_YOUR_WEB3FORMS_KEY_HERE';
+const W3F_KEY='71642190-f9be-4564-aad2-6e6b6de2f440';
 let cfLast=0;
 async function cfSubmit(){
   const st=$('cfStat'),msg=$('cfMsg').value.trim(),mail=$('cfMail').value.trim(),type=$('cfType').value;
@@ -717,10 +731,29 @@ async function cfSubmit(){
   btn.disabled=false;
 }
 
+/* صوت القراءة (متوقف افتراضياً) وزر إيقاف صوت المصحف */
+let rSnd=false;try{rSnd=localStorage.getItem('rsnd')==='1'}catch(e){}
+function rSoundUI(){$('rSnd').textContent=rSnd?'🔊 الصوت: يعمل':'🔇 الصوت: متوقف'}
+function rSound(){
+  rSnd=!rSnd;try{localStorage.setItem('rsnd',rSnd?'1':'0')}catch(e){}
+  rSoundUI();
+  if(!rSnd&&$('read').classList.contains('on'))$('mAud').pause();
+}
+rSoundUI();
+let bookActive=false;
+function bStopUI(v){bookActive=v;$('bStop').hidden=!v}
+function bookStop(){
+  const au=$('mAud');au.onended=null;au.pause();
+  document.querySelectorAll('#book .ay.cur').forEach(x=>x.classList.remove('cur'));
+  bStopUI(false);
+}
+$('mAud').addEventListener('pause',()=>{if(!$('mAud').ended)bStopUI(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&bookActive)bookStop()});
+
 /* الواجهة العربية / English */
 window.LANG='ar';try{window.LANG=localStorage.getItem('lang')||'ar'}catch(e){}
 const LVEN={'بذرة 🌱':'Seed 🌱','برعم 🌿':'Sprout 🌿','زهرة 🌸':'Flower 🌸','بطل القرآن 🛡️':'Quran Hero 🛡️','نجم القرآن 🌟':'Quran Star 🌟'};
-const RCEN={'عبدالباسط عبد الصمد':'Abdul Basit Abdus-Samad','محمود خليل الحصري':'Mahmoud Khalil Al-Husary','ياسر الدوسري':'Yasser Al-Dosari','سعد الغامدي':'Saad Al-Ghamdi','مشاري العفاسي':'Mishary Alafasy','عبدالرحمن السديس':'Abdul Rahman Al-Sudais','سعود الشريم':'Saud Al-Shuraim','وديع اليمني':'Wadee Al-Yamani'};
+const RCEN={'عبدالباسط عبد الصمد':'Abdul Basit Abdus-Samad','محمود خليل الحصري':'Mahmoud Khalil Al-Husary','ياسر الدوسري':'Yasser Al-Dosari','سعد الغامدي':'Saad Al-Ghamdi','مشاري العفاسي':'Mishary Alafasy','عبدالرحمن السديس':'Abdul Rahman Al-Sudais','سعود الشريم':'Saud Al-Shuraim','وديع اليمني':'Wadee Al-Yamani','أنس العمادي':'Anas Al-Emadi','محمد أيوب':'Muhammad Ayyub'};
 const EN=Object.assign({},LVEN,RCEN,{
 'ادخل':'Enter','القرآن الكريم':'The Holy Quran','اقرأ • استمع • احفظ':'Read • Listen • Memorize','📲 ثبّت التطبيق':'📲 Install app',
 '📖 القراءة':'📖 Read','📜 المصحف':'📜 Mushaf','📚 التفسير':'📚 Tafsir','🎧 الاستماع':'🎧 Listen','🌙 التحفيظ':'🌙 Memorize','⭐ الأطفال':'⭐ Kids',
@@ -751,7 +784,7 @@ const EN=Object.assign({},LVEN,RCEN,{
 'الرقم السري غير صحيح':'Wrong PIN','اكتب اسم الطفل':"Enter the child's name",'الرقم السري ٤ أرقام':'The PIN must be 4 digits','لا توجد نقاط بعد في هذه المنافسة':'No points yet in this competition',
 'على الآيفون والآيباد: اضغط زر المشاركة ⬆️ في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».':'On iPhone/iPad: tap the Share button ⬆️ in Safari, then choose “Add to Home Screen”.',
 'لأي ملاحظات أو استفسارات أو اقتراحات، تواصل معنا:':'Any comments, questions or suggestions? Contact us:',
-'💬 ملاحظة أو استفسار':'💬 Comment or question','🐞 خطأ في الموقع':'🐞 Bug report','💡 اقتراح إضافة':'💡 Suggest a feature',
+'💬 ملاحظة أو استفسار':'💬 Comment or question','🔊 الصوت: يعمل':'🔊 Sound: on','جاري تحميل بيانات هذا القارئ، حاول بعد لحظات أو اختر قارئاً آخر.':'Loading this reciter’s data. Try again in a moment or choose another reciter.','هذه السورة غير متوفرة لهذا القارئ، جرّب قارئاً آخر.':'This surah is not available for this reciter. Try another reciter.','🔇 الصوت: متوقف':'🔇 Sound: off','⏹ إيقاف الصوت':'⏹ Stop audio','🐞 خطأ في الموقع':'🐞 Bug report','💡 اقتراح إضافة':'💡 Suggest a feature',
 'اكتب رسالتك هنا…':'Write your message here…','اسمك (اختياري)':'Your name (optional)','بريدك للرد عليك (اختياري)':'Your email so we can reply (optional)',
 'إرسال':'Send','⏳ جاري الإرسال…':'⏳ Sending…','✅ وصلت رسالتك، شكراً لك!':'✅ Message received, thank you!','تعذر الإرسال، حاول لاحقاً':'Could not send. Please try again later.',
 'اكتب رسالتك أولاً (٥ أحرف على الأقل)':'Please write your message first (at least 5 characters)','البريد الإلكتروني غير صحيح':'The email address is not valid',
