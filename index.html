@@ -99,6 +99,21 @@ footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
 .edge.el{left:-10px}.edge.er{right:-10px}
 .inst{margin-top:6px;background:var(--gold);color:#4a1428;border:0;border-radius:20px;padding:6px 16px;font-family:inherit;font-weight:700;cursor:pointer}
 .inst[hidden]{display:none}
+.contact{text-align:center;padding:16px;margin-top:10px;color:#f3c6d4;font-size:.95rem}
+.cf{max-width:520px;margin:10px auto 0;display:grid;gap:8px;text-align:start}
+.cf input,.cf textarea,.cf select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--gold2);background:#4a1428;color:var(--txt);font-family:inherit;font-size:1rem}
+.cf textarea{min-height:96px;resize:vertical}
+.cf .hp{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+/* tafsir + english */
+.book{direction:rtl}
+.inst+.inst{margin-inline-start:6px}
+.tc{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:14px}
+.tc h4{color:var(--gold);margin-bottom:8px;font-size:1.05rem}
+.tafAyah{font-family:'Amiri Quran',serif;font-size:1.8rem;line-height:2.3;text-align:center;direction:rtl}
+.tafAr{direction:rtl;text-align:right;line-height:2;font-size:1.1rem;white-space:pre-line}
+.tafEn{direction:ltr;text-align:left;line-height:1.8;white-space:pre-line}
+html[dir=ltr] .mushaf,html[dir=ltr] .mem,html[dir=ltr] .ticker,html[dir=ltr] #splash .bism,html[dir=ltr] #splash .ayah{direction:rtl}
+html[dir=ltr] .pager{flex-direction:row-reverse}
 /* kids */
 #kids h3{color:var(--gold);font-family:'Amiri Quran',serif;font-size:1.6rem;text-align:center;margin:8px 0}
 .kcard{background:linear-gradient(160deg,#8a3556,#5f2038);border:2px solid var(--gold2);border-radius:22px;padding:18px;text-align:center;margin-bottom:16px;box-shadow:0 10px 30px #0007}
@@ -153,6 +168,7 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
   <h1>القرآن الكريم</h1>
   <p>اقرأ • استمع • احفظ</p>
   <button class="inst" id="instBtn" hidden>📲 ثبّت التطبيق</button>
+  <button class="inst" id="langBtn">English</button>
 </header>
 
 <nav>
@@ -160,6 +176,7 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
   <button data-t="book">📜 المصحف</button>
   <button data-t="listen">🎧 الاستماع</button>
   <button data-t="mem">🌙 التحفيظ</button>
+  <button data-t="tafsir">📚 التفسير</button>
   <button data-t="kids">⭐ الأطفال</button>
 </nav>
 
@@ -232,11 +249,36 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
   <div class="mem" id="memBox">اختر السورة…</div>
   <p style="text-align:center;margin-top:10px;color:#f3c6d4;font-size:.9rem">نصيحة: كرر الآية حتى تحفظها، ثم أخفِ النص واختبر نفسك. اضغط على أي آية لتبدأ منها.</p>
 </section>
+<section id="tafsir">
+  <div class="bar">
+    <label>السورة</label><select id="tSurah"></select>
+    <label>الآية</label><select id="tAyah"></select>
+  </div>
+  <div style="text-align:center;margin-bottom:12px">
+    <button class="btn sm" onclick="tafStep(-1)">→ السابقة</button>
+    <button class="btn sm" onclick="tafStep(1)">التالية ←</button>
+  </div>
+  <div id="tafBox"></div>
+  <p class="status" style="font-size:.85rem;opacity:.8">المصادر: التفسير الميسر (عربي) • المختصر في تفسير القرآن الكريم (إنجليزي)</p>
+</section>
 <section id="kids">
   <div id="kidBox"></div>
   <p class="status" style="font-size:.85rem;opacity:.8">النقاط والترتيب محفوظة على هذا الجهاز وهذا المتصفح.</p>
 </section>
 </main>
+
+<div class="contact">
+  <div>لأي خطأ أو اقتراح أو رغبة في إضافة شيء، تواصل معنا:</div>
+  <div class="cf">
+    <select id="cfType"><option value="bug">🐞 خطأ في الموقع</option><option value="idea">💡 اقتراح إضافة</option></select>
+    <textarea id="cfMsg" maxlength="1500" placeholder="اكتب رسالتك هنا…"></textarea>
+    <input id="cfName" maxlength="60" placeholder="اسمك (اختياري)">
+    <input id="cfMail" type="email" maxlength="120" placeholder="بريدك للرد عليك (اختياري)">
+    <input class="hp" id="cfBot" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn" id="cfSend" onclick="cfSubmit()">إرسال</button>
+    <div class="status" id="cfStat"></div>
+  </div>
+</div>
 
 <footer>﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾ — جعلنا الله وإياكم من أهل القرآن</footer>
 <audio id="mAud"></audio>
@@ -284,7 +326,7 @@ $('mReciter').value=4;
 /* التبويبات */
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));$(b.dataset.t).classList.add('on');if(b.dataset.t==='book')bookShow();if(b.dataset.t==='kids')kidRender();
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));$(b.dataset.t).classList.add('on');if(b.dataset.t==='book')bookShow();if(b.dataset.t==='kids')kidRender();if(b.dataset.t==='tafsir')tafOpen();
 });
 function enter(){$('splash').classList.add('hide');setTimeout(()=>$('splash').remove(),900)}
 
@@ -378,7 +420,7 @@ function memNext(first){
 const TP=604,PR=$('pR'),PL=$('pL'),BK=$('bk');
 let cur=1,busy=false,bReady=false,pc={};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const ar=n=>n.toLocaleString('ar-EG');
+const ar=n=>n.toLocaleString(window.LANG==='en'?'en':'ar-EG');
 const spread=()=>innerWidth>=820;
 async function getPage(n){
   if(pc[n])return pc[n];
@@ -601,6 +643,208 @@ try{
     addEventListener('appinstalled',()=>{ib.hidden=true});
   }
 }catch(e){}
+
+/* التفسير المختصر: الميسر (عربي) + المختصر (إنجليزي) */
+let tS=1,tA=1,tTok=0;
+const tcache={};
+async function tafData(slug,sn){
+  const k=slug+'/'+sn;if(tcache[k])return tcache[k];
+  const path=`tafsir/${slug}/${sn}.json`;let d;
+  try{d=await(await fetch('https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/'+path)).json()}
+  catch(e){d=await(await fetch('https://raw.githubusercontent.com/spa5k/tafsir_api/main/'+path)).json()}
+  const m={};(Array.isArray(d)?d:(d.ayahs||[])).forEach(a=>{m[a.ayah]=a.text});
+  return tcache[k]=m;
+}
+function tafFill(){
+  const n=SURAHS[tS-1].numberOfAyahs;
+  $('tAyah').innerHTML=Array.from({length:n},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
+  $('tAyah').value=tA;
+}
+function tafOpen(){
+  if(!SURAHS.length){$('tafBox').textContent='جاري التحميل…';setTimeout(tafOpen,600);return}
+  if(!$('tSurah').options.length){
+    $('tSurah').innerHTML=SURAHS.map(x=>`<option value="${x.number}">${x.number}. ${x.name}</option>`).join('');
+    $('tSurah').value=tS;tafFill();
+  }
+  tafShow();
+}
+async function tafShow(){
+  const tk=++tTok,box=$('tafBox');
+  box.innerHTML='<div class="tc">جاري التحميل…</div>';
+  let sd,a1=null,e1=null;
+  try{
+    [sd,a1,e1]=await Promise.all([getSurah(tS),tafData('ar-tafsir-muyassar',tS).catch(()=>null),tafData('en-tafsir-al-mukhtasar',tS).catch(()=>null)]);
+  }catch(e){if(tk===tTok)box.innerHTML='<div class="tc">تعذر تحميل البيانات. تأكد من اتصال الإنترنت.</div>';return}
+  if(tk!==tTok)return;
+  const ay=sd.ayahs.find(a=>a.n===tA)||sd.ayahs[0];
+  const miss='<span class="status">لا يوجد تفسير لهذه الآية في هذا المصدر</span>';
+  const av=a1&&a1[tA],ev=e1&&e1[tA];
+  box.innerHTML=`<div class="tc"><div class="tafAyah">${ay.t} ﴿${ar(tA)}﴾</div></div>
+  <div class="tc"><h4>📘 التفسير الميسر (عربي)</h4><div class="tafAr">${av?esc(av):miss}</div></div>
+  <div class="tc"><h4>📗 Brief Tafsir (English)</h4><div class="tafEn">${ev?esc(ev):miss}</div></div>`;
+}
+$('tSurah').onchange=e=>{tS=+e.target.value;tA=1;tafFill();tafShow()};
+$('tAyah').onchange=e=>{tA=+e.target.value;tafShow()};
+function tafStep(d){
+  if(!SURAHS.length)return;
+  let a=tA+d,sn=tS;
+  if(a<1){if(sn>1){sn--;a=SURAHS[sn-1].numberOfAyahs}else return}
+  else if(a>SURAHS[sn-1].numberOfAyahs){if(sn<114){sn++;a=1}else return}
+  tS=sn;tA=a;$('tSurah').value=sn;tafFill();tafShow();
+}
+
+/* التواصل: نموذج مجاني عبر Web3Forms (البريد لا يظهر في الموقع) */
+const W3F_KEY='PASTE_YOUR_WEB3FORMS_KEY_HERE';
+let cfLast=0;
+async function cfSubmit(){
+  const st=$('cfStat'),msg=$('cfMsg').value.trim(),mail=$('cfMail').value.trim(),type=$('cfType').value;
+  const say=t=>{st.textContent=t};
+  if(W3F_KEY.startsWith('PASTE')){say('لم يتم تفعيل نموذج التواصل بعد');return}
+  if(msg.length<5){say('اكتب رسالتك أولاً (٥ أحرف على الأقل)');return}
+  if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){say('البريد الإلكتروني غير صحيح');return}
+  if(Date.now()-cfLast<30000){say('انتظر قليلاً قبل إرسال رسالة أخرى');return}
+  const btn=$('cfSend');btn.disabled=true;say('⏳ جاري الإرسال…');
+  try{
+    const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({access_key:W3F_KEY,subject:(type==='bug'?'خطأ':'اقتراح')+' - موقع القرآن الكريم',from_name:$('cfName').value.trim()||'زائر',
+        email:mail||undefined,type,message:msg,botcheck:$('cfBot').value,page:location.href,browser:navigator.userAgent,lang:window.LANG})});
+    const d=await r.json();
+    if(d.success){say('✅ وصلت رسالتك، شكراً لك!');$('cfMsg').value='';cfLast=Date.now()}
+    else say('تعذر الإرسال، حاول لاحقاً');
+  }catch(e){say('تعذر الإرسال، حاول لاحقاً')}
+  btn.disabled=false;
+}
+
+/* الواجهة العربية / English */
+window.LANG='ar';try{window.LANG=localStorage.getItem('lang')||'ar'}catch(e){}
+const LVEN={'بذرة 🌱':'Seed 🌱','برعم 🌿':'Sprout 🌿','زهرة 🌸':'Flower 🌸','بطل القرآن 🛡️':'Quran Hero 🛡️','نجم القرآن 🌟':'Quran Star 🌟'};
+const RCEN={'عبدالباسط عبد الصمد':'Abdul Basit Abdus-Samad','محمود خليل الحصري':'Mahmoud Khalil Al-Husary','ياسر الدوسري':'Yasser Al-Dosari','سعد الغامدي':'Saad Al-Ghamdi','مشاري العفاسي':'Mishary Alafasy','عبدالرحمن السديس':'Abdul Rahman Al-Sudais','سعود الشريم':'Saud Al-Shuraim','وديع اليمني':'Wadee Al-Yamani'};
+const EN=Object.assign({},LVEN,RCEN,{
+'ادخل':'Enter','القرآن الكريم':'The Holy Quran','اقرأ • استمع • احفظ':'Read • Listen • Memorize','📲 ثبّت التطبيق':'📲 Install app',
+'📖 القراءة':'📖 Read','📜 المصحف':'📜 Mushaf','📚 التفسير':'📚 Tafsir','🎧 الاستماع':'🎧 Listen','🌙 التحفيظ':'🌙 Memorize','⭐ الأطفال':'⭐ Kids',
+'السورة':'Surah','الآية':'Ayah','حجم الخط':'Font size','جاري التحميل…':'Loading…','القارئ':'Reciter','الصفحة':'Page',
+'← السورة التالية':'Next surah','السورة السابقة →':'Previous surah','→ السابقة':'Previous','التالية ←':'Next',
+'اختر سورة للاستماع':'Choose a surah to listen to','الصفحة التالية':'Next page','الصفحة السابقة':'Previous page',
+'اسحب بالماوس أو الإصبع، أو استخدم أسهم لوحة المفاتيح ← →':'Drag with mouse or finger, or use the ← → keys (← next page, → previous)',
+'من آية':'From ayah','إلى آية':'To ayah','تكرار كل آية':'Repeat each ayah','إعادة المقطع':'Loop passage','إخفاء النص (اختبر حفظك)':'Hide text (test yourself)',
+'▶ ابدأ':'▶ Start','■ إيقاف':'■ Stop','اختر السورة…':'Choose a surah…',
+'نصيحة: كرر الآية حتى تحفظها، ثم أخفِ النص واختبر نفسك. اضغط على أي آية لتبدأ منها.':'Tip: repeat the ayah until you know it, then hide the text and test yourself. Tap any ayah to start from it.',
+'النقاط والترتيب محفوظة على هذا الجهاز وهذا المتصفح.':'Points and rankings are saved on this device and browser only.',
+'المصادر: التفسير الميسر (عربي) • المختصر في تفسير القرآن الكريم (إنجليزي)':'Sources: Al-Tafsir Al-Muyassar (Arabic) • Al-Mukhtasar fi Tafsir al-Quran al-Karim (English)',
+'📘 التفسير الميسر (عربي)':'📘 Al-Tafsir Al-Muyassar (Arabic)','لا يوجد تفسير لهذه الآية في هذا المصدر':'No tafsir for this ayah in this source',
+'تعذر تحميل البيانات. تأكد من اتصال الإنترنت.':'Could not load data. Check your internet connection.',
+'تعذر تشغيل الصوت لهذا القارئ/السورة، جرّب قارئاً آخر.':'Could not play audio for this reciter/surah. Try another reciter.',
+'✔ انتهى المقطع، بارك الله فيك':'✔ Passage finished, may Allah bless you','تعذر تحميل الصوت، جرّب قارئاً آخر.':'Could not load audio. Try another reciter.',
+'تعذر تحميل الصفحة، تأكد من الاتصال':'Could not load the page. Check your connection.',
+'من سيقرأ اليوم؟':'Who is reading today?','➕ إضافة طفل جديد':'➕ Add a new child','حفظ':'Save','اسم الطفل':"Child's name",'رقم سري (اختياري، ٤ أرقام)':'PIN (optional, 4 digits)',
+'🏆 لوحة المنافسة':'🏆 Leaderboard','🏁 إنهاء المنافسة وتتويج البطل':'🏁 End competition & crown the champion',
+'نقطة':'points','نجمة':'stars','🔥 يوم':'🔥 days','🏆 كأس':'🏆 cups','تبديل الطفل':'Switch child','حذف الحساب':'Delete account',
+'لا يوجد أطفال بعد، أضف أول بطل!':'No children yet. Add the first champion!',
+'📖 اقرأ في «المصحف»: كل صفحة تبقى مفتوحة ١٥ ثانية = ٥ نقاط':'📖 Read in the Mushaf: every page kept open for 15 seconds = 5 points',
+'🎯 ٣ صفحات في اليوم = وردك اليوم، ومكافأة ١٥ نقطة':'🎯 3 pages a day = your daily wird, plus a 15-point bonus',
+'🌙 أتمّ مقطعاً في «التحفيظ»: ٣ نقاط لكل آية، والضعف مع إخفاء النص':'🌙 Finish a passage in Memorize: 3 points per ayah, double with the text hidden',
+'🔥 كل يوم متتابع يزيد المكافأة':'🔥 Every consecutive day increases the bonus','⭐ نجمة جديدة مع كل ٢٥ نقطة':'⭐ A new star every 25 points',
+'سجّل دخولك من تبويب الأطفال لتحصل على نقاطك ⭐':'Log in from the Kids tab to earn your points ⭐',
+'أحسنت! أخذت نقاط هذا المقطع اليوم، جرّب مقطعاً جديداً':'Well done! You already earned points for this passage today. Try a new one.',
+'الرقم السري غير صحيح':'Wrong PIN','اكتب اسم الطفل':"Enter the child's name",'الرقم السري ٤ أرقام':'The PIN must be 4 digits','لا توجد نقاط بعد في هذه المنافسة':'No points yet in this competition',
+'على الآيفون والآيباد: اضغط زر المشاركة ⬆️ في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».':'On iPhone/iPad: tap the Share button ⬆️ in Safari, then choose “Add to Home Screen”.',
+'لأي خطأ أو اقتراح أو رغبة في إضافة شيء، تواصل معنا:':'Found a bug, or want to suggest something? Contact us:',
+'🐞 خطأ في الموقع':'🐞 Bug report','💡 اقتراح إضافة':'💡 Suggest a feature',
+'اكتب رسالتك هنا…':'Write your message here…','اسمك (اختياري)':'Your name (optional)','بريدك للرد عليك (اختياري)':'Your email so we can reply (optional)',
+'إرسال':'Send','⏳ جاري الإرسال…':'⏳ Sending…','✅ وصلت رسالتك، شكراً لك!':'✅ Message received, thank you!','تعذر الإرسال، حاول لاحقاً':'Could not send. Please try again later.',
+'اكتب رسالتك أولاً (٥ أحرف على الأقل)':'Please write your message first (at least 5 characters)','البريد الإلكتروني غير صحيح':'The email address is not valid',
+'انتظر قليلاً قبل إرسال رسالة أخرى':'Please wait a moment before sending another message','لم يتم تفعيل نموذج التواصل بعد':'The contact form has not been activated yet'
+});
+const RCRE=new RegExp(Object.keys(RCEN).join('|'),'g');
+const SUB=[
+[/^\+(\S+) نقطة /,'+$1 points '],
+[/لقراءة صفحة (\S+)/,'for reading page $1'],
+[/ وإتمام وردك اليوم 🎉/,' and completing your daily wird 🎉'],
+[/للحفظ بدون النظر ×٢ 🧠/,'for memorizing without looking ×2 🧠'],
+[/لحفظ المقطع/,'for memorizing the passage'],
+[/ \+ 🔥 (\S+) يوم متتابع/,' + 🔥 $1-day streak'],
+[/ ⭐ نجمة جديدة!/,' ⭐ New star!'],
+[/ 🎉 صرت «(.+)»/,(m,l)=>` 🎉 You are now “${LVEN[l]||l}”`],
+[/^🏆 مبروك (.+)! بطل المنافسة$/,'🏆 Congratulations $1! Champion of the competition'],
+[/^الآية (\S+) — التكرار (\S+) من (\S+)/,'Ayah $1 — repeat $2 of $3'],
+[/ \(بصوت العفاسي — التحفيظ آية بآية غير متوفر لهذا القارئ\)/,' (Alafasy voice: ayah-by-ayah not available for this reciter)'],
+[/^صفحة (\S+) – (\S+) من (\S+)$/,'Page $1–$2 of $3'],
+[/^صفحة (\S+) من (\S+)$/,'Page $1 of $2'],
+[/^(\S+) آية • مكية$/,'$1 ayahs • Meccan'],
+[/^(\S+) آية • مدنية$/,'$1 ayahs • Medinan'],
+[/^سورة (.+) — (.+)$/,(m,a,b)=>`Surah ${sn()[a.trim()]||a} — ${RCEN[b]||b}`],
+[/^(\d+)\. (.+)$/,(m,n,a)=>sn()[a]?`${n}. ${sn()[a]}`:m],
+[/^وردك اليوم: (\S+) من (\S+) صفحات$/,"Today's wird: $1 of $2 pages"],
+[/^باقي (\S+) نقطة لتصبح «(.+)»$/,(m,n,l)=>`${n} more points to become “${LVEN[l]||l}”`],
+[/^(\S+) نقطة$/,'$1 pts'],
+[/^الرقم السري لـ (.+)$/,'PIN for $1'],
+[/^حذف حساب (.+) ونقاطه نهائياً؟$/,'Permanently delete $1 and their points?'],
+[/^سيتوّج (.+) بالكأس 🏆 وتبدأ منافسة جديدة من الصفر. متابعة؟$/,'$1 will be crowned with the cup 🏆 and a new competition starts from zero. Continue?']
+];
+let SNM=null;
+const sn=()=>{if(!SNM&&typeof SURAHS!=='undefined'&&SURAHS.length){SNM={};SURAHS.forEach(x=>{SNM[x.name]=x.englishName})}return SNM||{}};
+const SKIP='.pg,.mushaf .text,.mushaf .sname,.mushaf .bismillah,.mem .ayah,.tafAyah,.tafAr,.tafEn,.ticker,footer,#splash .bism,#splash .ayah,script,style,#langBtn';
+function tx(str){
+  const m=str.match(/^(\s*)([\s\S]*?)(\s*)$/),c=m[2];
+  if(!c||!/[\u0600-\u06FF]/.test(c))return str;
+  let r=EN[c];
+  if(r===undefined){r=sn()[c]}
+  if(r===undefined){
+    r=c;for(const [re,f] of SUB)r=r.replace(re,f);
+    r=r.replace(RCRE,x=>RCEN[x]);
+    if(r===c)return str;
+    r=nd(r);
+  }
+  return m[1]+r+m[3];
+}
+function trNode(n){
+  const p=n.parentElement;if(!p||p.closest(SKIP))return;
+  if(n.__t!==undefined&&n.nodeValue===n.__t)return;
+  const o=n.nodeValue,v=tx(o);
+  if(v!==o){n.__o=o;n.__t=v;n.nodeValue=v}
+}
+function trAttr(el){
+  ['placeholder','title'].forEach(a=>{
+    const v=el.getAttribute(a);if(!v)return;
+    if(el.dataset['o'+a]===undefined){const t=tx(v);if(t!==v){el.dataset['o'+a]=v;el.setAttribute(a,t)}}
+  });
+}
+function trAll(root){
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),a=[];let n;
+  while(n=w.nextNode())a.push(n);
+  a.forEach(trNode);
+  if(root.querySelectorAll)root.querySelectorAll('[placeholder],[title]').forEach(trAttr);
+}
+function untr(){
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+  while(n=w.nextNode()){if(n.__o!==undefined){n.nodeValue=n.__o;n.__o=undefined;n.__t=undefined}}
+  document.querySelectorAll('[data-oplaceholder],[data-otitle]').forEach(el=>{
+    ['placeholder','title'].forEach(a=>{const k='o'+a;if(el.dataset[k]!==undefined){el.setAttribute(a,el.dataset[k]);delete el.dataset[k]}});
+  });
+}
+new MutationObserver(ms=>{
+  if(window.LANG!=='en')return;
+  ms.forEach(m=>{
+    if(m.type==='characterData')trNode(m.target);
+    else m.addedNodes.forEach(n=>{if(n.nodeType===3)trNode(n);else if(n.nodeType===1){trAll(n);trAttr(n)}});
+  });
+}).observe(document.body,{childList:true,subtree:true,characterData:true});
+function setLang(l){
+  window.LANG=l;try{localStorage.setItem('lang',l)}catch(e){}
+  const h=document.documentElement;h.lang=l;h.dir=l==='en'?'ltr':'rtl';
+  document.title=l==='en'?'The Holy Quran — Read, Listen & Memorize':'القرآن الكريم — قراءة واستماع وتحفيظ';
+  $('langBtn').textContent=l==='en'?'عربي':'English';
+  if(l==='en')trAll(document.body);else untr();
+  if($('book').classList.contains('on'))info();
+  if($('kids').classList.contains('on'))kidRender();
+  if($('tafsir').classList.contains('on'))tafShow();
+}
+$('langBtn').onclick=()=>setLang(window.LANG==='en'?'ar':'en');
+const _al=window.alert.bind(window),_cf=window.confirm.bind(window),_pr=window.prompt.bind(window);
+window.alert=m=>_al(window.LANG==='en'?tx(String(m)):m);
+window.confirm=m=>_cf(window.LANG==='en'?tx(String(m)):m);
+window.prompt=(m,d)=>_pr(window.LANG==='en'?tx(String(m)):m,d);
+setLang(window.LANG);
 </script>
 </body>
 </html>
