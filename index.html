@@ -267,10 +267,12 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
 </section>
 </main>
 
+<footer>﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾ — جعلنا الله وإياكم من أهل القرآن</footer>
+
 <div class="contact">
-  <div>لأي خطأ أو اقتراح أو رغبة في إضافة شيء، تواصل معنا:</div>
+  <div>لأي ملاحظات أو استفسارات أو اقتراحات، تواصل معنا:</div>
   <div class="cf">
-    <select id="cfType"><option value="bug">🐞 خطأ في الموقع</option><option value="idea">💡 اقتراح إضافة</option></select>
+    <select id="cfType"><option value="note">💬 ملاحظة أو استفسار</option><option value="bug">🐞 خطأ في الموقع</option><option value="idea">💡 اقتراح إضافة</option></select>
     <textarea id="cfMsg" maxlength="1500" placeholder="اكتب رسالتك هنا…"></textarea>
     <input id="cfName" maxlength="60" placeholder="اسمك (اختياري)">
     <input id="cfMail" type="email" maxlength="120" placeholder="بريدك للرد عليك (اختياري)">
@@ -280,7 +282,6 @@ input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px sol
   </div>
 </div>
 
-<footer>﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾ — جعلنا الله وإياكم من أهل القرآن</footer>
 <audio id="mAud"></audio>
 
 <script>
@@ -706,7 +707,7 @@ async function cfSubmit(){
   const btn=$('cfSend');btn.disabled=true;say('⏳ جاري الإرسال…');
   try{
     const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-      body:JSON.stringify({access_key:W3F_KEY,subject:(type==='bug'?'خطأ':'اقتراح')+' - موقع القرآن الكريم',from_name:$('cfName').value.trim()||'زائر',
+      body:JSON.stringify({access_key:W3F_KEY,subject:({note:'ملاحظة أو استفسار',bug:'خطأ',idea:'اقتراح'}[type])+' - موقع القرآن الكريم',from_name:$('cfName').value.trim()||'زائر',
         email:mail||undefined,type,message:msg,botcheck:$('cfBot').value,page:location.href,browser:navigator.userAgent,lang:window.LANG})});
     const d=await r.json();
     if(d.success){say('✅ وصلت رسالتك، شكراً لك!');$('cfMsg').value='';cfLast=Date.now()}
@@ -748,8 +749,8 @@ const EN=Object.assign({},LVEN,RCEN,{
 'أحسنت! أخذت نقاط هذا المقطع اليوم، جرّب مقطعاً جديداً':'Well done! You already earned points for this passage today. Try a new one.',
 'الرقم السري غير صحيح':'Wrong PIN','اكتب اسم الطفل':"Enter the child's name",'الرقم السري ٤ أرقام':'The PIN must be 4 digits','لا توجد نقاط بعد في هذه المنافسة':'No points yet in this competition',
 'على الآيفون والآيباد: اضغط زر المشاركة ⬆️ في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».':'On iPhone/iPad: tap the Share button ⬆️ in Safari, then choose “Add to Home Screen”.',
-'لأي خطأ أو اقتراح أو رغبة في إضافة شيء، تواصل معنا:':'Found a bug, or want to suggest something? Contact us:',
-'🐞 خطأ في الموقع':'🐞 Bug report','💡 اقتراح إضافة':'💡 Suggest a feature',
+'لأي ملاحظات أو استفسارات أو اقتراحات، تواصل معنا:':'Any comments, questions or suggestions? Contact us:',
+'💬 ملاحظة أو استفسار':'💬 Comment or question','🐞 خطأ في الموقع':'🐞 Bug report','💡 اقتراح إضافة':'💡 Suggest a feature',
 'اكتب رسالتك هنا…':'Write your message here…','اسمك (اختياري)':'Your name (optional)','بريدك للرد عليك (اختياري)':'Your email so we can reply (optional)',
 'إرسال':'Send','⏳ جاري الإرسال…':'⏳ Sending…','✅ وصلت رسالتك، شكراً لك!':'✅ Message received, thank you!','تعذر الإرسال، حاول لاحقاً':'Could not send. Please try again later.',
 'اكتب رسالتك أولاً (٥ أحرف على الأقل)':'Please write your message first (at least 5 characters)','البريد الإلكتروني غير صحيح':'The email address is not valid',
