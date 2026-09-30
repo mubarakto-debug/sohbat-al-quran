@@ -17,7 +17,8 @@
 <style>
 :root{--bg1:#5b1e35;--bg2:#3a1024;--card:#7a2f4a;--card2:#6a2640;--gold:#f7dc94;--gold2:#e8b95a;--txt:#fff3e2;--line:#a8536f}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%}
+html,html{overflow-x:hidden}
+body{min-height:100%;overflow-x:clip}
 body{font-family:'Cairo',sans-serif;color:var(--txt);background:radial-gradient(circle at 20% 0%,#7d2a48 0,var(--bg1) 40%,var(--bg2) 100%) fixed;line-height:1.7}
 /* splash */
 #splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(circle at 50% 30%,#7d2a48,#2e0c1c);transition:opacity .8s}
@@ -96,14 +97,14 @@ footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
 .flip .pg{position:absolute;inset:0;aspect-ratio:auto;backface-visibility:hidden}
 .flip .b{transform:rotateY(180deg)}
 .edge{position:absolute;top:50%;transform:translateY(-50%);z-index:8;width:44px;height:44px;border-radius:50%;border:0;background:#f7dc94;color:#4a1428;font-size:1.7rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 4px 14px #0008}
-.edge.el{left:-10px}.edge.er{right:-10px}
+.edge.el{left:6px}.edge.er{right:6px}
 .inst{margin-top:6px;background:var(--gold);color:#4a1428;border:0;border-radius:20px;padding:6px 16px;font-family:inherit;font-weight:700;cursor:pointer}
 .inst[hidden]{display:none}
 .contact{text-align:center;padding:16px;margin-top:10px;color:#f3c6d4;font-size:.95rem}
-.cf{max-width:520px;margin:10px auto 0;display:grid;gap:8px;text-align:start}
+.cf{position:relative;max-width:520px;margin:10px auto 0;display:grid;gap:8px;text-align:start}
 .cf input,.cf textarea,.cf select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--gold2);background:#4a1428;color:var(--txt);font-family:inherit;font-size:1rem}
 .cf textarea{min-height:96px;resize:vertical}
-.cf .hp{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+.cf .hp{position:absolute;top:0;inset-inline-start:0;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 /* tafsir + english */
 .book{direction:rtl}
 .inst+.inst{margin-inline-start:6px}
