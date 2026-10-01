@@ -634,15 +634,6 @@ function kidRender(){
   $('kidBox').innerHTML=top+board_html;
 }
 
-/* تلاوة الآية عند فتح الموقع بصوت ياسر الدوسري (الآية ١٧ من سورة القمر) */
-const intro=new Audio('https://everyayah.com/data/Yasser_Ad-Dussary_128kbps/054017.mp3');
-const IEV=['pointerdown','keydown','touchstart'];
-const introGo=()=>intro.play().then(()=>IEV.forEach(e=>document.removeEventListener(e,introGo))).catch(()=>{});
-introGo();
-IEV.forEach(e=>document.addEventListener(e,introGo));
-aud.addEventListener('play',()=>intro.pause());
-$('mAud').addEventListener('play',()=>intro.pause());
-
 /* تثبيت الموقع كتطبيق (PWA) */
 try{
   if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
