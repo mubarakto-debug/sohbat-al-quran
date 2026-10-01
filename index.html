@@ -1,876 +1,495 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#3a1024">
-<link rel="manifest" href="manifest.json">
+<title>السيرة النبوية — المختصر في السيرة للشيخ موسى العازمي ومختصر ابن هشام</title>
+<meta name="description" content="استمع إلى كتاب «المختصر في السيرة النبوية» للشيخ موسى العازمي، وتصفّح مختصر السيرة لابن هشام.">
+<meta name="theme-color" content="#5a1a35">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="القرآن الكريم">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<title>القرآن الكريم — قراءة واستماع وتحفيظ</title>
+<meta name="apple-mobile-web-app-title" content="السيرة النبوية">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg1:#5b1e35;--bg2:#3a1024;--card:#7a2f4a;--card2:#6a2640;--gold:#f7dc94;--gold2:#e8b95a;--txt:#fff3e2;--line:#a8536f}
-*{box-sizing:border-box;margin:0;padding:0}
-html,html{overflow-x:hidden}
-body{min-height:100%;overflow-x:clip}
-body{font-family:'Cairo',sans-serif;color:var(--txt);background:radial-gradient(circle at 20% 0%,#7d2a48 0,var(--bg1) 40%,var(--bg2) 100%) fixed;line-height:1.7}
-/* splash */
-#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(circle at 50% 30%,#7d2a48,#2e0c1c);transition:opacity .8s}
-#splash.hide{opacity:0;pointer-events:none}
-#splash .bism{font-family:'Amiri Quran',serif;color:var(--gold2);font-size:1.6rem;margin-bottom:18px;opacity:0;animation:fade 1.5s .2s forwards}
-#splash .ayah{font-family:'Amiri Quran',serif;font-size:clamp(2rem,6vw,3.8rem);color:var(--gold);line-height:2.1;max-width:900px;opacity:0;animation:fade 2s .8s forwards;text-shadow:0 2px 20px #0008}
-#splash button{margin-top:30px;opacity:0;animation:fade 1s 2.6s forwards}
-@keyframes fade{to{opacity:1}}
-button,select{font-family:inherit;font-size:1rem}
-.btn{background:linear-gradient(#f7dc94,#e0aa4c);color:#4a1428;border:0;padding:10px 26px;border-radius:30px;font-weight:800;cursor:pointer;transition:.2s}
-.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
-.btn.sm{padding:6px 16px;font-size:.9rem}
-.btn.ghost{background:transparent;color:var(--gold);border:1.5px solid var(--gold2)}
-/* ticker */
-.ticker{position:sticky;top:0;z-index:50;background:#2a0b1a;border-bottom:3px solid var(--gold2);overflow:hidden;white-space:nowrap;padding:10px 0}
-.ticker .track{display:inline-block;padding-right:100%;animation:scroll 320s linear infinite}
-.ticker:hover .track{animation-play-state:paused}
-.ticker span{font-family:'Amiri',serif;font-weight:700;font-size:1.45rem;color:var(--gold);margin:0 22px}
-.ticker i{color:#ff9fbd;font-style:normal;font-size:1.2rem}
-@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(100%)}}
-header{text-align:center;padding:26px 16px 8px}
-header h1{font-family:'Amiri Quran',serif;font-size:2.6rem;color:var(--gold);text-shadow:0 2px 12px #0006}
-header p{color:#f3c6d4}
-nav{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0}
-nav button{background:var(--card2);color:var(--txt);border:1.5px solid var(--line);padding:10px 28px;border-radius:30px;cursor:pointer;font-weight:700}
-nav button.on{background:linear-gradient(#f7dc94,#e0aa4c);color:#4a1428;border-color:var(--gold)}
-main{max-width:1000px;margin:0 auto;padding:0 14px 60px}
-section{display:none}section.on{display:block}
-.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;background:var(--card2);border:1px solid var(--line);padding:12px;border-radius:16px;margin-bottom:16px}
-select{background:#4a1428;color:var(--txt);border:1px solid var(--gold2);padding:8px 12px;border-radius:10px;max-width:100%}
-label{font-size:.95rem;color:#f3c6d4}
-/* mushaf */
-.mushaf{background:#fbf1de;color:#231016;border:8px double #b98a3c;border-radius:14px;padding:34px 30px;box-shadow:0 14px 40px #0008,inset 0 0 60px #e9cf9c;min-height:300px}
-.mushaf .sname{text-align:center;font-family:'Amiri Quran',serif;font-size:2.2rem;color:#7a2445;border:2px solid #b98a3c;border-radius:10px;padding:4px;margin-bottom:14px;background:#f3dfb4}
-.mushaf .bismillah{text-align:center;font-family:'Amiri Quran',serif;font-size:2rem;margin-bottom:10px}
-.mushaf .text{font-family:'Amiri Quran',serif;text-align:justify;text-align-last:center;line-height:2.6}
-.ayah{cursor:pointer;border-radius:6px;transition:.2s}
-.ayah:hover{background:#f0d9a2}
-.ayah.cur{background:#f4b6c9;box-shadow:0 0 0 3px #f4b6c9}
-.num{color:#9b6b1e;font-size:.8em;margin:0 4px}
-.pager{display:flex;justify-content:space-between;margin-top:14px}
-/* listening */
-.player{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center;margin-bottom:16px}
-.player h3{font-family:'Amiri Quran',serif;color:var(--gold);font-size:1.8rem}
-audio{width:100%;margin:10px 0;border-radius:30px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.grid button{background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer;font-family:'Amiri',serif;font-size:1.1rem}
-.grid button:hover,.grid button.on{background:var(--gold2);color:#4a1428}
-.grid small{display:block;font-family:'Cairo';font-size:.7rem;opacity:.8}
-/* memorize */
-.mem{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:22px;font-family:'Amiri Quran',serif;font-size:1.9rem;line-height:2.5;text-align:center}
-.mem .ayah{padding:2px 4px}
-.mem.hidden .ayah:not(.show){filter:blur(9px)}
-.mem .ayah.cur{background:#a3436a;box-shadow:none;color:#fff}
-.mem .ayah:hover{background:#8b3558}
-.status{text-align:center;color:var(--gold);margin:8px;min-height:1.6em}
-footer{text-align:center;color:#e5aebf;padding:20px;font-size:.9rem}
-/* book */
-.bookwrap{position:relative;max-width:980px;margin:0 auto}
-.book{position:relative;display:flex;perspective:2400px;padding:12px;border-radius:12px;background:linear-gradient(#6b2a44,#3f1327);box-shadow:0 18px 50px #000a;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
-.pg{position:relative;flex:1;aspect-ratio:.7;display:flex;flex-direction:column;padding:24px 22px 16px;background:linear-gradient(90deg,#f3e2bd,#fbf1de 35%,#fbf1de 65%,#f3e2bd);color:#231016;overflow:hidden;transition:opacity .18s}
-.pg::before{content:"";position:absolute;inset:9px;border:3px double #b98a3c;pointer-events:none}
-.pg.R{border-radius:0 6px 6px 0;box-shadow:inset 28px 0 26px -20px #0009}
-.pg.L{border-radius:6px 0 0 6px;box-shadow:inset -28px 0 26px -20px #0009}
-.ph{position:relative;z-index:1;display:flex;justify-content:space-between;font-family:'Amiri',serif;font-weight:700;color:#7a2445;padding:0 8px 4px;border-bottom:1px solid #d5b06a;margin-bottom:6px}
-.pt{position:relative;z-index:1;flex:1;min-height:0;overflow:hidden;font-family:'Amiri Quran',serif;text-align:justify;text-align-last:center;line-height:1.9;padding:0 6px}
-.pt.c{display:flex;flex-direction:column;justify-content:center;text-align:center}
-.pt .sb{text-align:center;color:#7a2445;border:2px solid #b98a3c;border-radius:8px;background:#f3dfb4;margin:4px 0;font-size:1.15em;line-height:1.6}
-.pt .bs{text-align:center;line-height:1.7}
-.pn{position:relative;z-index:1;text-align:center;font-family:'Amiri',serif;font-weight:700;color:#7a2445;padding-top:4px}
-.book.single .pg.L{display:none}
-.book.single .pg.R{border-radius:6px;max-width:540px;margin:0 auto;box-shadow:none}
-.flip{position:absolute;top:12px;bottom:12px;width:calc(50% - 12px);transform-style:preserve-3d;transition:transform .8s cubic-bezier(.45,.05,.3,1);z-index:5}
-.flip.fl{left:12px;transform-origin:right center}
-.flip.fr{right:12px;transform-origin:left center}
-.flip .pg{position:absolute;inset:0;aspect-ratio:auto;backface-visibility:hidden}
-.flip .b{transform:rotateY(180deg)}
-.edge{position:absolute;top:50%;transform:translateY(-50%);z-index:8;width:44px;height:44px;border-radius:50%;border:0;background:#f7dc94;color:#4a1428;font-size:1.7rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 4px 14px #0008}
-.edge.el{left:6px}.edge.er{right:6px}
-.inst{margin-top:6px;background:var(--gold);color:#4a1428;border:0;border-radius:20px;padding:6px 16px;font-family:inherit;font-weight:700;cursor:pointer}
-.inst[hidden]{display:none}
-.contact{text-align:center;padding:16px;margin-top:10px;color:#f3c6d4;font-size:.95rem}
-.cf{position:relative;max-width:520px;margin:10px auto 0;display:grid;gap:8px;text-align:start}
-.cf input,.cf textarea,.cf select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--gold2);background:#4a1428;color:var(--txt);font-family:inherit;font-size:1rem}
-.cf textarea{min-height:96px;resize:vertical}
-.cf .hp{position:absolute;top:0;inset-inline-start:0;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
-.stopfab{position:fixed;bottom:20px;left:16px;z-index:150;background:var(--gold);color:#4a1428;border:0;border-radius:30px;padding:12px 20px;font-family:inherit;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 8px 24px #000a}
-.stopfab[hidden]{display:none}
-/* tafsir + english */
-.book{direction:rtl}
-.inst+.inst{margin-inline-start:6px}
-.tc{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:14px}
-.tc h4{color:var(--gold);margin-bottom:8px;font-size:1.05rem}
-.tafAyah{font-family:'Amiri Quran',serif;font-size:1.8rem;line-height:2.3;text-align:center;direction:rtl}
-.tafAr{direction:rtl;text-align:right;line-height:2;font-size:1.1rem;white-space:pre-line}
-.tafEn{direction:ltr;text-align:left;line-height:1.8;white-space:pre-line}
-html[dir=ltr] .mushaf,html[dir=ltr] .mem,html[dir=ltr] .ticker,html[dir=ltr] #splash .bism,html[dir=ltr] #splash .ayah{direction:rtl}
-html[dir=ltr] .pager{flex-direction:row-reverse}
-/* kids */
-#kids h3{color:var(--gold);font-family:'Amiri Quran',serif;font-size:1.6rem;text-align:center;margin:8px 0}
-.kcard{background:linear-gradient(160deg,#8a3556,#5f2038);border:2px solid var(--gold2);border-radius:22px;padding:18px;text-align:center;margin-bottom:16px;box-shadow:0 10px 30px #0007}
-.kav{font-size:3.2rem;line-height:1.2}.ka{font-size:1.8rem;line-height:1}
-.kcard h3{margin:0}
-.kstats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
-.kstats div{background:#0003;border-radius:14px;padding:8px 2px;font-size:.85rem}
-.kstats b{display:block;font-size:1.5rem;color:var(--gold)}
-.kst{letter-spacing:3px;font-size:1.2rem;min-height:1.6em}
-.kgoal{margin:10px 0}
-.kbar{height:14px;background:#0004;border-radius:10px;overflow:hidden;margin-top:6px}
-.kbar i{display:block;height:100%;background:linear-gradient(90deg,#f7dc94,#e0aa4c);border-radius:10px;transition:width .6s}
-.kway{list-style:none;background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin-bottom:16px;line-height:2}
-.kpro{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:12px 0}
-.kpro button{background:var(--card2);color:var(--txt);border:2px solid var(--line);border-radius:18px;padding:12px;cursor:pointer;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px}
-.kpro button:hover{border-color:var(--gold);transform:translateY(-2px)}
-.kadd{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:16px}
-.kadd summary{cursor:pointer;font-weight:700;color:var(--gold)}
-.kadd input{display:block;width:100%;margin:10px 0;padding:10px;border-radius:10px;border:1px solid var(--gold2);background:#4a1428;color:var(--txt);font-family:inherit;font-size:1rem}
-.kavs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
-.kavs button{font-size:1.6rem;background:#4a1428;border:2px solid transparent;border-radius:12px;padding:4px 8px;cursor:pointer}
-.kavs button.on{border-color:var(--gold);background:#7a2f4a}
-.kb{background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:12px}
-.kr{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px}
-.kr.first{background:linear-gradient(90deg,#f7dc9433,transparent)}
-.kr.me{outline:2px solid var(--gold2)}
-.kr b{width:34px;text-align:center;font-size:1.4rem}
-.kn{flex:1;font-weight:700}
-.kp{color:var(--gold);font-weight:800}
-#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,120px);background:linear-gradient(#f7dc94,#e0aa4c);color:#4a1428;font-weight:800;padding:12px 22px;border-radius:30px;box-shadow:0 8px 24px #000a;z-index:200;opacity:0;pointer-events:none;max-width:92vw;text-align:center}
-#toast.go{animation:tst 3.6s forwards}
-@keyframes tst{0%{opacity:0;transform:translate(-50%,120px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,120px)}}
-/* ayah audio */
-.ay{cursor:pointer;border-radius:6px;transition:background .2s}
-.ay:hover{background:#f0d9a2}
-.ay.cur{background:#f4b6c9;box-shadow:0 0 0 3px #f4b6c9}
-input[type=number]{width:84px;background:#4a1428;color:var(--txt);border:1px solid var(--gold2);padding:8px;border-radius:10px;font-family:inherit;font-size:1rem}
-@media(max-width:600px){.mushaf{padding:20px 14px}.ticker span{font-size:1.2rem}}
+:root{--bg1:#7a2745;--bg2:#3f1226;--card:rgba(255,255,255,.07);--line:rgba(244,213,132,.28);--ink:#fff4ea;--muted:#e3bccb;--gold:#f4d584;--gold2:#e0a93f;--pink:#ff8fb8;--dk:#4a1428;--r:16px}
+*{box-sizing:border-box}
+html{background:#43132a;scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 75%);color:var(--ink);font-family:'Tajawal',Tahoma,sans-serif;line-height:1.8;font-size:17px}
+a{color:var(--gold)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.ticker{border-bottom:2px solid var(--gold);background:rgba(0,0,0,.18);overflow:hidden;white-space:nowrap;padding:6px 0;font-family:'Amiri',serif;font-size:1.25rem;color:var(--gold)}
+.track{display:inline-flex;gap:26px;animation:tk 70s linear infinite}
+.track i{font-style:normal;color:var(--pink)}
+@keyframes tk{to{transform:translateX(50%)}}
+@media (prefers-reduced-motion:reduce){.track{animation:none}}
+.hero{text-align:center;padding:5vh 5vw 2vh}
+.hero h1{font-size:clamp(2.2rem,7vw,3.2rem);line-height:1.3;margin:0;color:var(--gold)}
+.hero p{margin:0 0 14px;color:var(--muted)}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 20px;border-radius:99px;font:inherit;font-size:.95rem;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover{border-color:var(--gold)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.gold{background:linear-gradient(#f8e3a0,var(--gold2));color:var(--dk);border:0;font-weight:700}
+#insHelp{max-width:560px;margin:14px auto 0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;font-size:.95rem}
+.tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:10px 5vw}
+.tabs button{padding:10px 24px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:500;cursor:pointer}
+.tabs button[aria-selected="true"]{background:linear-gradient(#f8e3a0,var(--gold2));color:var(--dk);border-color:transparent;font-weight:700}
+.view{max-width:980px;margin:auto;padding:3vh 5vw 5vh}
+.view[hidden]{display:none}
+h2{font-size:1.9rem;margin:0 0 2px;color:var(--gold)}
+.sub{color:var(--muted);margin:0 0 20px}
+.box,.now,.page,.card,ul.list button{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+.player{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:start}
+.now{padding:20px;position:sticky;top:12px}
+.now h3{margin:0 0 4px;font-size:1.4rem;color:var(--gold)}
+.now p{margin:0 0 12px;color:var(--muted);font-size:.95rem}
+.now audio{width:100%;margin:6px 0 10px}
+.now .msg{background:rgba(244,213,132,.14);border-radius:10px;padding:10px 12px;font-size:.92rem}
+ul.list{list-style:none;margin:0;padding:0 0 0 4px;display:grid;gap:8px;max-height:70vh;overflow:auto}
+ul.list li[hidden]{display:none}
+.search{width:100%;padding:10px 16px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;margin-bottom:10px}
+ul.list button{width:100%;text-align:right;display:flex;gap:12px;align-items:center;padding:12px 14px;color:var(--ink);font:inherit;cursor:pointer}
+ul.list button[aria-current="true"]{border-color:var(--gold);background:rgba(244,213,132,.15)}
+ul.list .n{flex:none;min-width:34px;height:34px;padding:0 8px;border-radius:99px;background:rgba(244,213,132,.18);color:var(--gold);display:grid;place-items:center;font-weight:700}
+ul.list small{display:block;color:var(--muted)}
+.book{display:grid;grid-template-columns:240px 1fr;gap:24px}
+.toc{display:grid;gap:6px;align-content:start;position:sticky;top:12px}
+.toc button{text-align:right;padding:9px 12px;border-radius:10px;border:1px solid transparent;background:none;color:var(--ink);font:inherit;cursor:pointer}
+.toc button[aria-current="true"]{background:rgba(244,213,132,.15);border-color:var(--gold);font-weight:700}
+.page{padding:clamp(18px,4vw,38px)}
+.page h3{font-size:1.8rem;margin:0 0 12px;color:var(--gold)}
+.page .txt{font-family:'Amiri',serif;font-size:var(--fs,1.3rem);line-height:2.1}
+.page .txt p{margin:0 0 .9em}
+.tools{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.pager{display:flex;justify-content:space-between;margin-top:18px}
+.note{font-size:.88rem;color:var(--muted);border-top:1px dashed var(--line);margin-top:20px;padding-top:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{padding:14px 16px}
+.card b{display:block;color:var(--gold);font-size:1.05rem}
+.card span{color:var(--muted);font-size:.93rem}
+.fnote{background:rgba(244,213,132,.14);border-radius:var(--r);padding:12px 16px;margin-bottom:14px;font-size:.95rem}
+footer{text-align:center;color:var(--muted);padding:4vh 5vw;font-size:.92rem}
+@media (max-width:760px){ul.list{max-height:55vh}.player,.book{grid-template-columns:1fr}.now,.toc{position:static}.toc{grid-auto-flow:column;overflow-x:auto;padding-bottom:6px}.toc button{white-space:nowrap}}
 </style>
 </head>
 <body>
-
-<div id="splash">
-  <div class="bism">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-  <div class="ayah">﴿ وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍ ﴾</div>
-  <button class="btn" onclick="enter()">ادخل</button>
-</div>
-
-<div class="ticker"><div class="track" id="track"></div></div>
-
-<header>
-  <h1>القرآن الكريم</h1>
-  <p>اقرأ • استمع • احفظ</p>
-  <button class="inst" id="instBtn" hidden>📲 ثبّت التطبيق</button>
-  <button class="inst" id="langBtn">English</button>
+<div class="ticker" aria-hidden="true"><div class="track" id="track"></div></div>
+<header class="hero">
+  <h1>السيرة النبوية</h1>
+  <p>استمع ▪ اقرأ ▪ تعرّف</p>
+  <button class="btn gold" id="install">⬇ تثبيت التطبيق</button>
+  <div id="insHelp" hidden></div>
 </header>
+<nav class="tabs" id="views" role="tablist"></nav>
 
-<nav>
-  <button class="on" data-t="read">📖 القراءة</button>
-  <button data-t="book">📜 المصحف</button>
-  <button data-t="listen">🎧 الاستماع</button>
-  <button data-t="mem">🌙 التحفيظ</button>
-  <button data-t="tafsir">📚 التفسير</button>
-  <button data-t="kids">⭐ الأطفال</button>
-</nav>
-
-<main>
-<!-- القراءة -->
-<section id="read" class="on">
-  <div class="bar">
-    <label>السورة</label><select id="rSurah"></select>
-    <label>حجم الخط</label>
-    <button class="btn sm ghost" onclick="fs(-2)">A-</button>
-    <button class="btn sm ghost" onclick="fs(2)">A+</button>
-    <button class="btn sm ghost" id="rSnd" onclick="rSound()"></button>
-  </div>
-  <div class="mushaf" id="mushaf">جاري التحميل…</div>
-  <div class="pager">
-    <button class="btn sm" onclick="goSurah(1)">← السورة التالية</button>
-    <button class="btn sm" onclick="goSurah(-1)">السورة السابقة →</button>
-  </div>
-</section>
-
-<!-- الاستماع -->
-<section id="listen">
-  <div class="bar">
-    <label>القارئ</label><select id="lReciter"></select>
-  </div>
+<section id="audio" class="view">
+  <h2>السيرة مسموعة</h2>
+  <p class="sub">اختر الحلقة، وهي مناسبة للكبار والصغار.</p>
   <div class="player">
-    <h3 id="nowPlaying">اختر سورة للاستماع</h3>
-    <audio id="aud" controls></audio>
-    <div class="status" id="lStatus"></div>
-    <button class="btn sm" onclick="stepListen(-1)">→ السابقة</button>
-    <button class="btn sm" onclick="stepListen(1)">التالية ←</button>
+    <div class="now" aria-live="polite">
+      <h3 id="nTitle"></h3>
+      <p id="nDesc"></p>
+      <div id="nBox"></div>
+    </div>
+    <div><input id="q" class="search" placeholder="ابحث في الحلقات..." aria-label="ابحث في الحلقات"><ul class="list" id="eps"></ul></div>
   </div>
-  <div class="grid" id="lGrid"></div>
 </section>
 
-<!-- المصحف -->
-<section id="book">
-  <div class="bar">
-    <label>السورة</label><select id="bSurah"></select>
-    <label>القارئ</label><select id="bReciter"></select>
-    <label>الصفحة</label><input type="number" id="bPage" min="1" max="604" value="1">
+<section id="book" class="view">
+  <h2>مختصر السيرة لابن هشام</h2>
+  <p class="sub">تصفّح محاور الكتاب فصلاً فصلاً.</p>
+  <div class="book">
+    <div class="toc" id="toc"></div>
+    <article class="page">
+      <div class="tools">
+        <span>حجم الخط</span>
+        <button class="btn" id="fMinus" aria-label="تصغير الخط">أ−</button>
+        <button class="btn" id="fPlus" aria-label="تكبير الخط">أ+</button>
+      </div>
+      <h3 id="cTitle"></h3>
+      <div class="txt" id="cTxt"></div>
+      <div class="pager">
+        <button class="btn" id="next">التالي ‹</button>
+        <button class="btn" id="prev">› السابق</button>
+      </div>
+      <p class="note">هذه الفصول ملخصات بصياغة مبسطة على ترتيب السيرة. للنص الكامل لكتاب ابن هشام ارجع إلى طبعة موثوقة، أو ضع نص الفصول في المصفوفة <code>CHAPTERS</code> داخل هذا الملف.</p>
+    </article>
   </div>
-  <div class="bookwrap">
-    <div class="book" id="bk"><div class="pg R" id="pR"></div><div class="pg L" id="pL"></div></div>
-    <button class="edge el" onclick="turn(1)" title="الصفحة التالية">‹</button>
-    <button class="edge er" onclick="turn(-1)" title="الصفحة السابقة">›</button>
-  </div>
-  <div class="status" id="bInfo"></div>
-  <div class="status" style="font-size:.85rem;opacity:.8">اسحب بالماوس أو الإصبع، أو استخدم أسهم لوحة المفاتيح ← →</div>
 </section>
 
-<!-- التحفيظ -->
-<section id="mem">
-  <div class="bar">
-    <label>السورة</label><select id="mSurah"></select>
-    <label>من آية</label><select id="mFrom"></select>
-    <label>إلى آية</label><select id="mTo"></select>
-  </div>
-  <div class="bar">
-    <label>القارئ</label><select id="mReciter"></select>
-    <label>تكرار كل آية</label>
-    <select id="mRep"><option>1</option><option>2</option><option selected>3</option><option>5</option><option>10</option></select>
-    <label><input type="checkbox" id="mLoop"> إعادة المقطع</label>
-    <label><input type="checkbox" id="mHide"> إخفاء النص (اختبر حفظك)</label>
-  </div>
-  <div style="text-align:center;margin-bottom:12px">
-    <button class="btn" onclick="memPlay()">▶ ابدأ</button>
-    <button class="btn ghost" onclick="memStop()">■ إيقاف</button>
-  </div>
-  <div class="status" id="mStatus"></div>
-  <div class="mem" id="memBox">اختر السورة…</div>
-  <p style="text-align:center;margin-top:10px;color:#f3c6d4;font-size:.9rem">نصيحة: كرر الآية حتى تحفظها، ثم أخفِ النص واختبر نفسك. اضغط على أي آية لتبدأ منها.</p>
+<section id="family" class="view">
+  <h2>آل النبي ﷺ وصحابته</h2>
+  <p class="sub">أولاده وزوجاته، والخلفاء الراشدون، والعشرة المبشرون بالجنة رضي الله عنهم.</p>
+  <div class="tabs" id="ftabs" role="tablist"></div>
+  <div class="fnote" id="fnote"></div>
+  <div class="grid" id="fgrid"></div>
 </section>
-<section id="tafsir">
-  <div class="bar">
-    <label>السورة</label><select id="tSurah"></select>
-    <label>الآية</label><select id="tAyah"></select>
-  </div>
-  <div style="text-align:center;margin-bottom:12px">
-    <button class="btn sm" onclick="tafStep(-1)">→ السابقة</button>
-    <button class="btn sm" onclick="tafStep(1)">التالية ←</button>
-  </div>
-  <div id="tafBox"></div>
-  <p class="status" style="font-size:.85rem;opacity:.8">المصادر: التفسير الميسر (عربي) • المختصر في تفسير القرآن الكريم (إنجليزي)</p>
-</section>
-<section id="kids">
-  <div id="kidBox"></div>
-  <p class="status" style="font-size:.85rem;opacity:.8">النقاط والترتيب محفوظة على هذا الجهاز وهذا المتصفح.</p>
-</section>
-</main>
 
-<footer>﴿ وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا ﴾ — جعلنا الله وإياكم من أهل القرآن</footer>
-
-<div class="contact">
-  <div>لأي ملاحظات أو استفسارات أو اقتراحات، تواصل معنا:</div>
-  <div class="cf">
-    <select id="cfType"><option value="note">💬 ملاحظة أو استفسار</option><option value="bug">🐞 خطأ في الموقع</option><option value="idea">💡 اقتراح إضافة</option></select>
-    <textarea id="cfMsg" maxlength="1500" placeholder="اكتب رسالتك هنا…"></textarea>
-    <input id="cfName" maxlength="60" placeholder="اسمك (اختياري)">
-    <input id="cfMail" type="email" maxlength="120" placeholder="بريدك للرد عليك (اختياري)">
-    <input class="hp" id="cfBot" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <button class="btn" id="cfSend" onclick="cfSubmit()">إرسال</button>
-    <div class="status" id="cfStat"></div>
-  </div>
-</div>
-
-<button class="stopfab" id="bStop" hidden onclick="bookStop()">⏹ إيقاف الصوت</button>
-<audio id="mAud"></audio>
+<footer>نسأل الله أن ينفع بهذا العمل. صلى الله وسلم على نبينا محمد.</footer>
 
 <script>
-const $=id=>document.getElementById(id);
-const pad=(n,l=3)=>String(n).padStart(l,'0');
+/* ===== الصوتيات =====
+   ضع رابط ملف mp3 مباشرًا في src، أو رابط تضمين يوتيوب مثل:
+   https://www.youtube.com/embed/VIDEO_ID
+   وإن تُرك src فارغًا يظهر زر بحث عن الحلقة. */
+const AB = "تأليف الشيخ موسى العازمي، قراءة د. علي بشير أحمد";
+const BASE = "https://archive.org/download/Mokhtasar__fi_Sirra/";
+const RAW = `001|النسب النبوي الشريف
+002|ولادة النبي صلى الله عليه وسلم ورضاعه
+003|رضاعه صلى الله عليه وسلم في بادية بني سعد
+004|حادثة شق صدره صلى الله عليه وسلم الشريف
+005|وفاة آمنة بنت وهب أم النبي صلى الله عليه وسلم
+006-007|كفالة جده عبدالمطلب - وفاة عبدالمطلب
+008|كفالة عمه (أبو طالب)
+009|شهوده صلى الله عليه وسلم حلف الفضول
+010|رعي النبي صلى الله عليه وسلم الغنم
+011|خروجه صلى الله عليه وسلم في تجارة خديجة
+012|تجديد بناء الكعبة
+013-014|وضع الحجر الأسود - حفظ الله رسوله
+015|مبعث النبي صلى الله عليه وسلم
+016|فتور الوحي ونزوله مرة ثانية
+017|أقسام الدعوة - الدعوة السرية
+018|أول دم أهريق الإسلام
+019|الصدع بالدعوة
+020-021|حماية أبي طالب - موقف أبي لهب
+022-023|فائدة في تسمية أبي لهب - عداوة أم جميل العوراء
+024-025|بعث قريش إلى أبي طالب - حوار الوليد
+026|وصف النبي صلى الله عليه وسلم بالساحر
+027|أساليب قريش في محاربة الدعوة
+028|تعذيب قريش من أسلم
+029|شكوى الصحابة لرسول الله ﷺ
+030-031|الهجرة الأولى إلى الحبشة - عدد المهاجرين إلى الحبشة
+032-033|سجود كفار قريش - عودة مهاجري الحبشة
+034|مفاوضات قريش مع أبي طالب في أمر النبي ﷺ
+035|إسلام حمزة بن عبدالمطلب رضي الله عنه
+036-037|دعاء الرسول ﷺ لعمر - تأثير الدعاء عليه
+038-039|قصة إسلام عمر - وعزة المسلمين بإسلامه
+040|عتبة بن ربيعة يحاور رسول الله صلى الله عليه وسلم
+041|طلب قريش الآيات
+042|القرآن العظيم أعظم المعجزات
+043-044|الهجرة الثانية إلى الحبشة
+045|وهم في ذكر أبي موسى الأشعري رضي الله عنه
+046-047|تعقُّب قريش مهاجِري الحبشة
+048-049|المقاطعة الجائرة - نقض الصحيفة
+050-051|وفاة أبي طالب - شفاعة النبي صلى الله عليه وسلم لعمه
+052-053|وفاة خديجة رضي الله عنها - وفضلها
+054|اشتداد إيذاء قريش للنبي ﷺ
+055-056|خروج الرسول ﷺ إلى الطائف - وصوله إليها
+057-058|نزول جبريل وملك الجبال - جوار المطعم بن عدي
+059-060|الإسراء والمعراج - الخلاف في تحديد وقت هذه الرحلة
+061|الإسراء والمعراج كان بجسده وروحه ﷺ
+062|قصة الإسراء والمعراج
+063-064|إمامته ﷺ بالأنبياء - عَرْضُ الآنية
+065-071|صعود الرسول ﷺ في المعراج إلى السماوات
+072-073|عرض الآنية عند البيت - سدرة المنتهى
+074|رؤيته ﷺ جبريل عليه السلام
+075-076|دخول النبي ﷺ الجنة - رؤيته نهر الكوثر
+077|لقاء الرسول ﷺ بربه سبحانه وفرض الصلوات
+078|الراجح أن الرسول ﷺ لم ير ربه ليلة المعراج
+079|رجوع النبي ﷺ إلى مكة وإخبار الناس بمسراه
+080|تصديق أبي بكر مسرى رسول الله ﷺ
+081|نزول الوحي لبيان المواقيت
+082|انشقاق القمر
+083|عَرْضُ النبي ﷺ نَفْسَه على قبائل العرب
+084|إسلام إياس بن معاذ الأَشهلي رضي الله عنه
+085-086|بدء إسلام الأنصار - أسماء رهط الخزرج
+087|بيعة العقبة الأولى
+088|بنود بيعة العقبة الأولى
+089|بعث مصعب وابن أم مكتوم إلى المدينة
+090|بيعة العقبة الثانية
+091|الإذن بالهجرة إلى المدينة
+092|اجتماع قريش في دار الندوة
+093|هجرة النبي صلى الله عليه وسلم
+094|خدمة آل أبي بكر رضي الله عنه للنبي صلى الله عليه وسلم
+095|إذ هما في الغار
+096|الطريق إلى المدينة
+097|مطاردة سراقة بن مالك رضي الله عنه
+098|وصول الرسول صلى الله عليه وسلم وصاحبه إلى قباء
+099|فضائل المدينة النبوية
+100|بناء المسجد النبوي
+101|تشريع الأذان
+102|المغازي النبوية
+103|السنة الثانية للهجرة
+104|تحويل القبلة
+105|غزوة بدر الكبرى
+106|خوف أمية بن خلف من القتل
+107|نزول المسلمين بالعُدوة الدنيا
+108|بناء العريش وتعبئة الجيش
+109|المبارزة ونزول الملائكة
+110|هزيمة الكفار
+111|فضل أهل بدر
+112|غزوة بني قينقاع
+113|غزوة أحد
+114|استشارة رسول الله صلى الله عليه وسلم أصحابه
+115|خروج الرسول صلى الله عليه وسلم إلى أحد
+116|تمرّد عبدالله بن أبيّ وأصحابه
+117|بدء القتال وشدة أبي دجانة رضي الله عنه
+118|انتصار المسلمين الساحق
+119|استشهاد حمزة بن عبدالمطلب رضي الله عنه
+120|الرسول صلى الله عليه وسلم يقتل أبي بن خلف قبحه الله
+121|شماتة أبي سفيان بعد نهاية المعركة
+122|فضل شهداء أحد
+123|ثناء الرسول صلى الله عليه وسلم على ربه عز وجل
+124|غزوة حمراء الأسد
+125|سرية عبدالله بن أنيس رضي الله عنه
+126|سرية الرجيع
+127|فاجعة بئر معونة
+128|حزن النبي صلى الله عليه وسلم على شهداء بئر معونة
+129|غزوة بني النضير
+130|حصار بني النضير واستسلامهم
+131|غزوة الخندق أو الأحزاب
+132|نقض بني قريظة العهد
+133|سعي النبي صلى الله عليه وسلم إلى مصالحة غطفان
+134|إصابة سعد بن معاذ رضي الله عنه
+135|هزيمة الأحزاب
+136|غزوة بني قريظة
+137|حكم سعد بن معاذ رضي الله عنه في بني قريظة
+138|زواج النبي صلى الله عليه وسلم من زينب بنت جحش رضي الله عنها
+139|سرية عبدالله بن عتيك رضي الله عنه لقتل سلام بن أبي الحقيق
+140|سرية زيد بن حارثة رضي الله عنه إلى العيص
+141|سرية الخَبَط
+142|غزوة المُرَيسيع أو بني المُصطَلِق
+143|زواج الرسول صلى الله عليه وسلم من جويرية رضي الله عنها
+144|قصة الإفك
+145|غزوة الحديبية
+146|نزول الرسول صلى الله عليه وسلم بالحديبية
+147|بيعة الرضوان
+148|صلح الحديبية
+149|حزن المسلمين من هذا الصلح
+150|صلح الحديبية أعظم الفتوح
+151|مكاتبة النبي صلى الله عليه وسلم الملوك والأمراء
+152|وفاة النجاشي أصحمة رضي الله عنه
+153|كتاب النبي صلى الله عليه وسلم إلى كسرى وقيصر
+154|تبشر النبي صلى الله عليه وسلم بفتح فارس والروم ومصر
+155|غزوة ذي قَرَد، أو الغابة
+156|غزوة خيبر
+157|وصول المسلمين إلى خيبر وإغارتهم
+158|تم الفتح على يد أبي الحسن رضي الله عنه
+159|فتح حصن قلعة الزبير
+160|هل فتحت حصون الكُتيبة صلحاً؟
+161|عِظَمُ غنائم خيبر
+162|دخول النبي صلى الله عليه وسلم بصفية رضي الله عنها
+163|قصة الشاة المسمومة
+164|مصالحة يهود فدك
+165|غزوة ذات الرقاع أو غزوة نجد
+166|قصة بيع جمل جابر رضي الله عنه
+167|عمرة القضاء أو القضية
+168|زواج النبي صلى الله عليه وسلم بميمونة رضي الله عنها
+169|غزوة مؤتة
+170|الراية إلى سيف الله المسلول رضي الله عنه
+171|سرية ذات السلاسل
+172|الفتح الأعظم؛ فتح مكة شرفها الله
+173|هجرة العباس بن عبدالمطلب رضي الله عنه بعياله
+174|تحسس قريش الأخبار، وإسلام أبي سفيان
+175|دخول كتائب الإسلام مكة
+176|دخول النبي صلى الله عليه وسلم مكة شرّفها الله
+177|خطبة النبي صلى الله عليه وسلم وعفوه عن أهل مكة
+178|فتح مكة وأثره على العرب
+179|غزوة حنين
+180|ثبات النبي صلى الله عليه وسلم يوم حنين
+181|نزول الملائكة في غزوة حنين
+182|غزوة الطائف
+183|عَتْبُ الأنصار رضي الله عنهم
+184|غزوة تبوك
+185|استنفار النبي صلى الله عليه وسلم المسلمين لغزو الروم
+186|عدد جيش المسلمين في غزوة تبوك
+187|وصول الرسول صلى الله عليه وسلم إلى تبوك
+188|محاولة اغتيال النبي صلى الله عليه وسلم
+189|تأمير أبي بكر الصديق رضي الله عنه على الحج
+190|عام الوفود
+191|وفد بني حنيفة
+192|قدوم ضمام بن ثعلبة رضي الله عنه
+193|الوداع الأخير في الدنيا
+194|حجة الوداع
+195|تلبية النبي صلى الله عليه وسلم وأصحابه
+196|إقامة النبي صلى الله عليه وسلم بمكة
+197|خروج النبي صلى الله عليه وسلم وأصحابه إلى منى
+198|إفاضة النبي صلى الله عليه وسلم من عرفة إلى مزدلفة
+199|خطبة النبي صلى الله عليه وسلم يوم النحر
+200|بعثُ جيش أسامة رضي الله عنه إلى أُبْنَى
+201|ابتداء مرض النبي صلى الله عليه وسلم
+202|إمامة أبي بكر الصديق رضي الله عنه الناس
+203|النظرة الأخيرة
+204|وفاة النبي صلى الله عليه وسلم
+205|الصلاة على النبي صلى الله عليه وسلم ودفنه`;
+const EPS = RAW.split("\n").map(l=>{ const [id,...t] = l.split("|"); return {id, title:t.join("|"), desc:AB, src:BASE+id+".mp3"}; });
+const SHEIKH = "الشيخ موسى العازمي";
+const $ = id => document.getElementById(id);
 
-/* الشريط المتحرك */
-const TICKER=[
- ['﴿ إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ ﴾','الإسراء ٩'],
- ['«خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ»','رواه البخاري'],
- ['﴿ إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ ﴾','الحجر ٩'],
- ['«إِنَّ لِلَّهِ أَهْلِينَ مِنَ النَّاسِ، هُمْ أَهْلُ الْقُرْآنِ، أَهْلُ اللَّهِ وَخَاصَّتُهُ»','رواه ابن ماجه وأحمد'],
- ['﴿ أَفَلَا يَتَدَبَّرُونَ الْقُرْآنَ أَمْ عَلَىٰ قُلُوبٍ أَقْفَالُهَا ﴾','محمد ٢٤'],
- ['«اقْرَءُوا الْقُرْآنَ فَإِنَّهُ يَأْتِي يَوْمَ الْقِيَامَةِ شَفِيعًا لِأَصْحَابِهِ»','رواه مسلم'],
- ['﴿ وَنُنَزِّلُ مِنَ الْقُرْآنِ مَا هُوَ شِفَاءٌ وَرَحْمَةٌ لِّلْمُؤْمِنِينَ ﴾','الإسراء ٨٢'],
- ['«الْمَاهِرُ بِالْقُرْآنِ مَعَ السَّفَرَةِ الْكِرَامِ الْبَرَرَةِ»','متفق عليه'],
- ['﴿ الَّذِينَ آتَيْنَاهُمُ الْكِتَابَ يَتْلُونَهُ حَقَّ تِلَاوَتِهِ ﴾','البقرة ١٢١'],
- ['«مَنْ قَرَأَ حَرْفًا مِنْ كِتَابِ اللَّهِ فَلَهُ بِهِ حَسَنَةٌ وَالْحَسَنَةُ بِعَشْرِ أَمْثَالِهَا»','رواه الترمذي'],
- ['﴿ وَنَزَّلْنَا عَلَيْكَ الْكِتَابَ تِبْيَانًا لِّكُلِّ شَيْءٍ ﴾','النحل ٨٩'],
- ['«يُقَالُ لِصَاحِبِ الْقُرْآنِ: اقْرَأْ وَارْتَقِ وَرَتِّلْ كَمَا كُنْتَ تُرَتِّلُ فِي الدُّنْيَا»','رواه أبو داود والترمذي']
+function showEp(i, auto){
+  const e = EPS[i];
+  $("nTitle").textContent = e.title;
+  $("nDesc").textContent = e.desc;
+  const box = $("nBox"); box.innerHTML = "";
+  if(!e.src){
+    const q = encodeURIComponent(SHEIKH + " السيرة النبوية " + e.title);
+    box.innerHTML = '<div class="msg">لم يُضف رابط هذه الحلقة بعد. <a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+q+'">ابحث عنها في يوتيوب</a></div>';
+  } else if(/youtube\.com\/embed/.test(e.src)){
+    const f = document.createElement("iframe");
+    f.src = e.src; f.title = e.title; f.allowFullscreen = true;
+    f.style.cssText = "width:100%;aspect-ratio:16/9;border:0;border-radius:10px";
+    box.appendChild(f);
+  } else {
+    const a = document.createElement("audio"); a.controls = true; a.src = e.src; a.preload = "none"; a.autoplay = !!auto; a.onended = ()=>{ if(i+1<EPS.length) showEp(i+1, true); };
+    box.appendChild(a);
+    const d = document.createElement("a"); d.className = "btn"; d.href = e.src; d.download = ""; d.target = "_blank"; d.rel = "noopener"; d.textContent = "⬇ تحميل الحلقة";
+    box.appendChild(d);
+  }
+  [...$("eps").children].forEach((li,k)=>li.firstChild.setAttribute("aria-current", k===i));
+  if(auto) $("eps").children[i].scrollIntoView({block:"nearest"});
+}
+function renderEps(){
+  const ul = $("eps"); ul.innerHTML = "";
+  EPS.forEach((e,i)=>{
+    const li = document.createElement("li");
+    li.innerHTML = '<button><span class="n">'+e.id.split("-").map(x=>+x).join("-")+'</span><span>'+e.title+'</span></button>';
+    li.firstChild.onclick = ()=>showEp(i, true);
+    ul.appendChild(li);
+  });
+  showEp(0);
+}
+$("q").oninput = e=>{ const v = e.target.value.trim(); [...$("eps").children].forEach((li,k)=>{ li.hidden = v && !EPS[k].title.includes(v); }); };
+
+/* ===== الكتاب ===== */
+const CHAPTERS = [
+ {t:"نسب النبي ﷺ ومولده", p:[
+  "هو محمد بن عبد الله بن عبد المطلب بن هاشم، من قريش، من ذرية إسماعيل بن إبراهيم عليهما السلام.",
+  "نسبه الشريف: محمد بن عبد الله بن عبد المطلب بن هاشم بن عبد مناف بن قصي بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة بن مدركة بن إلياس بن مضر بن نزار بن معد بن عدنان.",
+  "وُلد في مكة في عام الفيل، حين جاء أبرهة الحبشي بجيشه ليهدم الكعبة فرده الله. وكان أبوه عبد الله قد توفي قبل ولادته."]},
+ {t:"الطفولة والشباب", p:[
+  "استُرضع في بادية بني سعد، ثم ردّته مرضعته حليمة إلى أمه آمنة، وتوفيت أمه وهو صغير، فكفله جده عبد المطلب ثم عمه أبو طالب.",
+  "اشتهر بين قومه بالصادق الأمين، وعمل في التجارة، وتزوج خديجة رضي الله عنها. وشارك قومه في إعادة بناء الكعبة، وحكم بينهم في وضع الحجر الأسود حكمًا أرضى الجميع."]},
+ {t:"بدء الوحي والدعوة", p:[
+  "كان يتعبد في غار حراء، فنزل عليه جبريل عليه السلام في رمضان بأول آيات القرآن: «اقرأ».",
+  "بدأ الدعوة سرًّا، فآمنت خديجة، وأبو بكر، وعلي، وزيد بن حارثة رضي الله عنهم، ثم أُمر بالجهر بالدعوة فواجهه أهل مكة بالأذى والسخرية."]},
+ {t:"الصبر والهجرة إلى الحبشة", p:[
+  "اشتد أذى قريش على المسلمين الضعفاء، فأذن النبي ﷺ لبعضهم بالهجرة إلى الحبشة حيث ملك عادل هو النجاشي.",
+  "ثم حوصر بنو هاشم في الشعب سنوات، وتوفي أبو طالب وخديجة في عام واحد سُمّي عام الحزن، وخرج النبي ﷺ إلى الطائف يدعو أهلها فردوه. وفي تلك المرحلة كانت رحلة الإسراء والمعراج."]},
+ {t:"الهجرة إلى المدينة", p:[
+  "بايع أهل يثرب النبي ﷺ في العقبة، ثم هاجر مع أبي بكر الصديق، واختبآ في غار ثور ثلاثة أيام قبل أن يصلا المدينة.",
+  "أسس المسجد النبوي، وآخى بين المهاجرين والأنصار، وكتب وثيقة تنظّم العيش بين أهل المدينة على اختلاف دياناتهم."]},
+ {t:"غزوة بدر", p:[
+  "وقعت في رمضان من السنة الثانية للهجرة، وخرج المسلمون وهم نحو ثلاثمئة وقليل في مواجهة جيش قريش الأكبر عددًا وعدة.",
+  "نصر الله المسلمين نصرًا حاسمًا، وقُتل عدد من صناديد قريش، وعُوملت الأسرى معاملة حسنة، وافتُدي كثير منهم بتعليم أبناء المسلمين القراءة والكتابة."]},
+ {t:"غزوة أحد والخندق", p:[
+  "في أحد خالف الرماة أمر النبي ﷺ بترك مواقعهم فانقلب سير المعركة، وأصيب النبي ﷺ واستشهد حمزة رضي الله عنه وجمع من الصحابة. وتعلّم المسلمون درس الطاعة.",
+  "وفي غزوة الخندق حاصرت الأحزاب المدينة، فحفر المسلمون الخندق بمشورة سلمان الفارسي، وردّ الله الأحزاب بريح وجنود لم يروها."]},
+ {t:"صلح الحديبية وفتح مكة", p:[
+  "خرج النبي ﷺ معتمرًا في السنة السادسة فمنعته قريش، وانتهى الأمر بصلح الحديبية الذي بدا لبعضهم شديدًا، لكنه كان فتحًا مبينًا انتشر الإسلام بعده.",
+  "ولما نقضت قريش العهد سار النبي ﷺ إلى مكة في السنة الثامنة، ودخلها فاتحًا متواضعًا وعفا عن أهلها قائلاً: اذهبوا فأنتم الطلقاء."]},
+ {t:"حجة الوداع ووفاته ﷺ", p:[
+  "حجّ النبي ﷺ في السنة العاشرة، وخطب في الناس خطبة عظيمة أكد فيها حرمة الدماء والأموال، وأوصى بالنساء، وبالتمسك بكتاب الله.",
+  "ثم مرض ﷺ في ربيع الأول من السنة الحادية عشرة، وتوفي في المدينة المنورة في بيت عائشة رضي الله عنها، وتولى أبو بكر الصديق الخلافة بعده."]}
 ];
-$('track').innerHTML=[...TICKER,...TICKER].map(t=>`<span>${t[0]} <i>(${t[1]})</i></span><span style="color:#ff9fbd">✦</span>`).join('');
+let ch = 0, fs = 1.3;
+function showCh(i){
+  ch = Math.max(0, Math.min(CHAPTERS.length-1, i));
+  const c = CHAPTERS[ch];
+  $("cTitle").textContent = c.t;
+  $("cTxt").innerHTML = c.p.map(x=>"<p>"+x+"</p>").join("");
+  [...$("toc").children].forEach((b,k)=>b.setAttribute("aria-current", k===ch));
+  $("prev").disabled = ch===0; $("next").disabled = ch===CHAPTERS.length-1;
+}
+CHAPTERS.forEach((c,i)=>{
+  const b = document.createElement("button"); b.textContent = c.t; b.onclick = ()=>showCh(i);
+  $("toc").appendChild(b);
+});
+$("prev").onclick = ()=>showCh(ch-1);
+$("next").onclick = ()=>showCh(ch+1);
+function setFs(v){ fs = Math.max(1, Math.min(2, v)); document.querySelector(".page").style.setProperty("--fs", fs+"rem"); }
+$("fPlus").onclick = ()=>setFs(fs+.1);
+$("fMinus").onclick = ()=>setFs(fs-.1);
 
-/* القراء */
-const RECITERS=[
- {n:'عبدالباسط عبد الصمد',s:'https://server7.mp3quran.net/basit/',e:'Abdul_Basit_Murattal_192kbps'},
- {n:'محمود خليل الحصري',s:'https://server13.mp3quran.net/husr/',e:'Husary_128kbps'},
- {n:'ياسر الدوسري',s:'https://server11.mp3quran.net/yasser/',e:'Yasser_Ad-Dussary_128kbps'},
- {n:'سعد الغامدي',s:'https://server7.mp3quran.net/s_gmd/',e:'Ghamadi_40kbps'},
- {n:'مشاري العفاسي',s:'https://server8.mp3quran.net/afs/',e:'Alafasy_128kbps'},
- {n:'عبدالرحمن السديس',s:'https://server11.mp3quran.net/sds/',e:'Abdurrahmaan_As-Sudais_192kbps'},
- {n:'سعود الشريم',s:'https://server7.mp3quran.net/shur/',e:'Saood_ash-Shuraym_128kbps'},
- {n:'وديع اليمني',s:'https://server6.mp3quran.net/wdee/',e:null},
- {n:'أنس العمادي',s:null,e:null},
- {n:'محمد أيوب',s:null,e:'Muhammad_Ayyoub_128kbps'}
+/* ===== الآل والصحابة ===== */
+const FAM = [
+ {k:"أولاده ﷺ", note:"له من الأبناء ثلاثة ذكور وأربع بنات. كل أولاده من خديجة رضي الله عنها إلا إبراهيم فأمه مارية القبطية. وتوفي الأبناء الذكور صغارًا، وتوفيت البنات في حياته إلا فاطمة فتوفيت بعده بنحو ستة أشهر.", items:[
+  ["القاسم","أكبر أولاده، وبه يكنى ﷺ أبا القاسم، وتوفي صغيرًا قبل البعثة."],
+  ["زينب","كبرى بناته، تزوجت أبا العاص بن الربيع."],
+  ["رقية","تزوجها عثمان بن عفان وهاجرت معه إلى الحبشة، وتوفيت يوم بدر."],
+  ["أم كلثوم","تزوجها عثمان بعد رقية، فسمي ذا النورين، وتوفيت سنة تسع للهجرة."],
+  ["فاطمة الزهراء","تزوجها علي بن أبي طالب، وهي أم الحسن والحسين."],
+  ["عبد الله","ولد بعد البعثة ويلقب بالطيب والطاهر، وتوفي صغيرًا."],
+  ["إبراهيم","ولد في المدينة من مارية القبطية، وتوفي وهو رضيع."]]},
+ {k:"زوجاته ﷺ", note:"تزوج ﷺ إحدى عشرة امرأة على المشهور، وهن أمهات المؤمنين. توفيت خديجة وزينب بنت خزيمة في حياته، وتوفي ﷺ عن تسع.", items:[
+  ["خديجة بنت خويلد","أول زوجاته وأول من آمن به، ولم يتزوج عليها حتى توفيت."],
+  ["سودة بنت زمعة","تزوجها بعد وفاة خديجة."],
+  ["عائشة بنت أبي بكر","بنت الصديق، وكانت من أكثر الصحابة رواية للعلم."],
+  ["حفصة بنت عمر","بنت عمر بن الخطاب، وكان عندها المصحف الذي جمعه أبو بكر."],
+  ["زينب بنت خزيمة","تلقب أم المساكين لكثرة إحسانها، وتوفيت بعد زواجها بأشهر."],
+  ["أم سلمة (هند بنت أبي أمية)","اشتهرت بحكمة رأيها يوم الحديبية."],
+  ["زينب بنت جحش","نزل في زواجها قرآن، وكانت كثيرة الصدقة."],
+  ["جويرية بنت الحارث","من بني المصطلق، وبزواجها أُطلق أسرى قومها."],
+  ["أم حبيبة (رملة بنت أبي سفيان)","هاجرت إلى الحبشة وصبرت على دينها."],
+  ["صفية بنت حيي","من نسل هارون عليه السلام، وأسلمت بعد خيبر."],
+  ["ميمونة بنت الحارث","آخر من تزوجها ﷺ، وتوفيت في سرف قرب مكة."]]},
+ {k:"الخلفاء الراشدون", note:"هم الأربعة الذين تولوا الخلافة بعد النبي ﷺ على منهاج النبوة، بترتيب خلافتهم.", items:[
+  ["أبو بكر الصديق","خلافته من سنة 11 إلى 13هـ. ثبّت الأمة بعد وفاة النبي ﷺ، وقاتل المرتدين، وأمر بجمع القرآن."],
+  ["عمر بن الخطاب","خلافته من سنة 13 إلى 23هـ. اتسعت الفتوحات في عهده، ودوّن الدواوين، وعُرف بعدله."],
+  ["عثمان بن عفان","خلافته من سنة 23 إلى 35هـ. جمع الناس على مصحف واحد، وجهز جيش العسرة."],
+  ["علي بن أبي طالب","خلافته من سنة 35 إلى 40هـ. ابن عم النبي ﷺ وزوج فاطمة، وكان من أعلم الصحابة بالقضاء."]]},
+ {k:"العشرة المبشرون بالجنة", note:"سماهم النبي ﷺ في حديث رواه أبو داود والترمذي، ولا يعني ذلك أن غيرهم لا يدخل الجنة.", items:[
+  ["أبو بكر الصديق","صاحب النبي ﷺ في الهجرة وفي الغار."],
+  ["عمر بن الخطاب","الفاروق، فرّق الله به بين الحق والباطل."],
+  ["عثمان بن عفان","ذو النورين، وصاحب بئر رومة وجيش العسرة."],
+  ["علي بن أبي طالب","أول من أسلم من الصبيان، وحامل لواء خيبر."],
+  ["طلحة بن عبيد الله","وقى النبي ﷺ بنفسه يوم أحد."],
+  ["الزبير بن العوام","حواري رسول الله ﷺ، وابن عمته صفية."],
+  ["عبد الرحمن بن عوف","من السابقين إلى الإسلام، وكان تاجرًا كريمًا."],
+  ["سعد بن أبي وقاص","أول من رمى بسهم في سبيل الله، وقائد فتح القادسية."],
+  ["سعيد بن زيد","من السابقين الأولين، وابن عم عمر وزوج أخته."],
+  ["أبو عبيدة بن الجراح","أمين هذه الأمة، وقائد فتوح الشام."]]}
 ];
-fetch('https://mp3quran.net/api/v3/reciters?language=ar').then(r=>r.json()).then(d=>{
-  [[7,/وديع/],[8,/العمادي/],[9,/محمد\s*[أا]يوب/]].forEach(([i,re])=>{
-    const w=d.reciters.find(x=>re.test(x.name));
-    if(!w||!w.moshaf||!w.moshaf.length)return;
-    const m=w.moshaf.find(k=>k.surah_total>=114)||w.moshaf[0];
-    RECITERS[i].s=m.server.replace(/\/?$/,'/');
-    if(m.surah_list&&m.surah_total<114)RECITERS[i].l=new Set(m.surah_list.split(',').map(Number));
-  });
-}).catch(()=>{});
-const recOpts=RECITERS.map((r,i)=>`<option value="${i}">${r.n}</option>`).join('');
-$('lReciter').innerHTML=recOpts;$('mReciter').innerHTML=recOpts;
-$('mReciter').value=4;
-
-/* التبويبات */
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('on'));$(b.dataset.t).classList.add('on');if(b.dataset.t==='book')bookShow();if(b.dataset.t==='kids')kidRender();if(b.dataset.t==='tafsir')tafOpen();
+let fi = 0;
+function showFam(i){
+  fi = i; const g = FAM[i];
+  $("fnote").textContent = g.note;
+  $("fgrid").innerHTML = g.items.map(x=>'<div class="card"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join("");
+  [...$("ftabs").children].forEach((b,k)=>b.setAttribute("aria-selected", k===i));
+}
+FAM.forEach((g,i)=>{
+  const b = document.createElement("button"); b.role = "tab"; b.textContent = g.k; b.onclick = ()=>showFam(i);
+  $("ftabs").appendChild(b);
 });
-function enter(){$('splash').classList.add('hide');setTimeout(()=>$('splash').remove(),900)}
 
-/* بيانات السور */
-let SURAHS=[],cache={};
-async function getSurah(n){
-  if(cache[n])return cache[n];
-  const r=await fetch(`https://api.alquran.cloud/v1/surah/${n}/quran-uthmani`);
-  const d=(await r.json()).data;
-  const bism=d.ayahs[0].text.split(' ').slice(0,4).join(' ');
-  d.ayahs=d.ayahs.map((a,i)=>({n:a.numberInSurah,p:a.page,t:(i===0&&n!==1&&n!==9&&a.text.startsWith(bism))?a.text.split(' ').slice(4).join(' '):a.text}));
-  return cache[n]=d;
+/* ===== التبويبات ===== */
+const VIEWS = [["audio","🎧 الاستماع"],["book","📖 الكتاب"],["family","👨‍👩‍👧 الآل والصحابة"]];
+function showView(v){
+  VIEWS.forEach(([id],i)=>{ $(id).hidden = id!==v; $("views").children[i].setAttribute("aria-selected", id===v); });
 }
-async function init(){
-  try{
-    SURAHS=(await(await fetch('https://api.alquran.cloud/v1/surah')).json()).data;
-  }catch(e){$('mushaf').textContent='تعذر تحميل البيانات. تأكد من اتصال الإنترنت.';return}
-  const opts=SURAHS.map(s=>`<option value="${s.number}">${s.number}. ${s.name}</option>`).join('');
-  $('rSurah').innerHTML=opts;$('mSurah').innerHTML=opts;$('bSurah').innerHTML=opts;
-  $('lGrid').innerHTML=SURAHS.map(s=>`<button data-n="${s.number}" onclick="playSurah(${s.number})">${s.name}<small>${s.numberOfAyahs} آية • ${s.revelationType==='Meccan'?'مكية':'مدنية'}</small></button>`).join('');
-  loadRead(1);setMemSurah(1);
-}
-init();
+VIEWS.forEach(([id,l])=>{ const b = document.createElement("button"); b.role = "tab"; b.textContent = l; b.onclick = ()=>showView(id); $("views").appendChild(b); });
 
-/* القراءة */
-let size=2.1,curSurah=1;
-function fs(d){size=Math.max(1.3,Math.min(3.6,size+d/10));$('mushaf').querySelector('.text').style.fontSize=size+'rem'}
-async function loadRead(n){
-  curSurah=n;$('rSurah').value=n;$('mushaf').textContent='جاري التحميل…';
-  const s=await getSurah(n);
-  $('mushaf').innerHTML=`<div class="sname">${s.name}</div>${(n!==1&&n!==9)?'<div class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>':''}<div class="text" style="font-size:${size}rem">${s.ayahs.map(a=>`<span class="ayah" onclick="readAyah(${n},${a.n},this)">${a.t} <span class="num">﴿${a.n.toLocaleString('ar-EG')}﴾</span></span>`).join(' ')}</div>`;
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-$('rSurah').onchange=e=>loadRead(+e.target.value);
-function goSurah(d){const n=curSurah+d;if(n>=1&&n<=114)loadRead(n)}
-function readAyah(s,a,el){ /* اضغط على آية لسماعها */
-  document.querySelectorAll('#mushaf .ayah.cur').forEach(x=>x.classList.remove('cur'));el.classList.add('cur');
-  if(!rSnd)return;
-  memStop();
-  const r=RECITERS[$('mReciter').value]||RECITERS[4];
-  const folder=r.e||RECITERS[4].e;
-  const au=$('mAud');au.src=`https://everyayah.com/data/${folder}/${pad(s)}${pad(a)}.mp3`;au.play().catch(()=>{});
-}
+/* ===== الشريط العلوي ===== */
+const TK = ["«وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِلْعَالَمِينَ» (الأنبياء ١٠٧)","«لَقَدْ كَانَ لَكُمْ فِي رَسُولِ اللَّهِ أُسْوَةٌ حَسَنَةٌ» (الأحزاب ٢١)","«وَإِنَّكَ لَعَلَىٰ خُلُقٍ عَظِيمٍ» (القلم ٤)","«لَقَدْ جَاءَكُمْ رَسُولٌ مِّنْ أَنفُسِكُمْ عَزِيزٌ عَلَيْهِ مَا عَنِتُّمْ» (التوبة ١٢٨)","«إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ» (الأحزاب ٥٦)","«لا يؤمن أحدكم حتى أكون أحبّ إليه من والده وولده والناس أجمعين» (متفق عليه)","«من سلك طريقًا يلتمس فيه علمًا سهّل الله له به طريقًا إلى الجنة» (رواه مسلم)"];
+const tk = TK.map(t=>"<span>"+t+"</span><i>✦</i>").join("");
+$("track").innerHTML = tk + tk;
 
-/* الاستماع */
-let curL=null;const aud=$('aud');
-function playSurah(n){
-  curL=n;const r=RECITERS[$('lReciter').value];
-  if(!r.s){$('lStatus').textContent='جاري تحميل بيانات هذا القارئ، حاول بعد لحظات أو اختر قارئاً آخر.';return}
-  if(r.l&&!r.l.has(n)){$('lStatus').textContent='هذه السورة غير متوفرة لهذا القارئ، جرّب قارئاً آخر.';return}
-  aud.src=`${r.s}${pad(n)}.mp3`;aud.play().catch(()=>{});
-  $('nowPlaying').textContent=`سورة ${SURAHS[n-1].name} — ${r.n}`;$('lStatus').textContent='';
-  document.querySelectorAll('#lGrid button').forEach(b=>b.classList.toggle('on',+b.dataset.n===n));
-}
-function stepListen(d){let n=(curL||0)+d;const r=RECITERS[$('lReciter').value];while(n>=1&&n<=114&&r.l&&!r.l.has(n))n+=d;if(n>=1&&n<=114)playSurah(n)}
-aud.onended=()=>stepListen(1);
-aud.onerror=()=>{if(aud.src)$('lStatus').textContent='تعذر تشغيل الصوت لهذا القارئ/السورة، جرّب قارئاً آخر.'};
-$('lReciter').onchange=()=>{if(curL)playSurah(curL)};
+/* ===== التثبيت على الجوال والحاسوب ===== */
+if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+let dp = null;
+addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); dp = e; });
+addEventListener("appinstalled",()=>{ $("install").hidden = true; });
+if(matchMedia("(display-mode: standalone)").matches || navigator.standalone) $("install").hidden = true;
+$("install").onclick = async ()=>{
+  if(dp){ dp.prompt(); await dp.userChoice; dp = null; return; }
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  $("insHelp").textContent = ios
+    ? "على الآيفون والآيباد: افتح الموقع في Safari، اضغط زر المشاركة، ثم اختر «إضافة إلى الشاشة الرئيسية»."
+    : "على الأندرويد: افتح قائمة المتصفح ⋮ ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية». على الحاسوب (Chrome أو Edge): اضغط أيقونة التثبيت في شريط العنوان.";
+  $("insHelp").hidden = false;
+};
 
-/* التحفيظ */
-let mS=1,mA=[],mIdx=0,mRep=0,mRun=false;
-async function setMemSurah(n){
-  mS=n;memStop();const s=await getSurah(n);mA=s.ayahs;
-  const o=mA.map(a=>`<option value="${a.n}">${a.n}</option>`).join('');
-  $('mFrom').innerHTML=o;$('mTo').innerHTML=o;$('mTo').value=Math.min(mA.length,5);
-  renderMem();
-}
-function renderMem(cur){
-  $('memBox').innerHTML=mA.map(a=>`<span class="ayah ${a.n===cur?'cur show':''}" data-n="${a.n}" onclick="memJump(${a.n},this)">${a.t} <span class="num" style="color:#f7dc94">﴿${a.n.toLocaleString('ar-EG')}﴾</span></span>`).join(' ');
-  $('memBox').classList.toggle('hidden',$('mHide').checked);
-}
-$('mSurah').onchange=e=>setMemSurah(+e.target.value);
-$('mHide').onchange=()=>renderMem();
-function memPlay(){mRun=true;mIdx=+$('mFrom').value;mRep=0;memNext(true)}
-function memJump(n,el){$('mFrom').value=n;if(+$('mTo').value<n)$('mTo').value=n;el.classList.add('show');memPlay()}
-function memStop(){mRun=false;const a=$('mAud');a.pause();$('mStatus').textContent=''}
-function memNext(first){
-  if(!mRun)return;
-  const to=+$('mTo').value,from=+$('mFrom').value,reps=+$('mRep').value;
-  if(!first){mRep++;if(mRep>=reps){mRep=0;mIdx++}}
-  if(mIdx>to){if($('mLoop').checked){mIdx=from;mRep=0}else{memStop();$('mStatus').textContent='✔ انتهى المقطع، بارك الله فيك';kidMem(mS,from,to);return}}
-  const r=RECITERS[$('mReciter').value];let folder=r.e,note='';
-  if(!folder){folder=RECITERS[4].e;note=' (بصوت العفاسي — التحفيظ آية بآية غير متوفر لهذا القارئ)'}
-  renderMem(mIdx);
-  const cur=$('memBox').querySelector('.cur');if(cur)cur.scrollIntoView({block:'center',behavior:'smooth'});
-  $('mStatus').textContent=`الآية ${mIdx} — التكرار ${mRep+1} من ${reps}${note}`;
-  const a=$('mAud');a.src=`https://everyayah.com/data/${folder}/${pad(mS)}${pad(mIdx)}.mp3`;
-  a.onended=()=>setTimeout(()=>memNext(false),600);
-  a.onerror=()=>{memStop();$('mStatus').textContent='تعذر تحميل الصوت، جرّب قارئاً آخر.'};
-  a.play().catch(()=>{});
-}
-
-/* المصحف */
-const TP=604,PR=$('pR'),PL=$('pL'),BK=$('bk');
-let cur=1,busy=false,bReady=false,pc={};
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const ar=n=>n.toLocaleString(window.LANG==='en'?'en':'ar-EG');
-const spread=()=>innerWidth>=820;
-async function getPage(n){
-  if(pc[n])return pc[n];
-  const r=await fetch(`https://api.alquran.cloud/v1/page/${n}/quran-uthmani`);
-  return pc[n]=(await r.json()).data.ayahs;
-}
-function fit(el){
-  const t=el.querySelector('.pt');if(!t||!t.clientHeight)return;
-  let f=Math.min(el.clientWidth/15,34);t.style.fontSize=f+'px';
-  while(t.scrollHeight>t.clientHeight+1&&f>10){f-=.5;t.style.fontSize=f+'px'}
-}
-async function fill(el,n){
-  el.dataset.p=n;
-  if(n<1||n>TP){el.innerHTML='';return}
-  let ay;try{ay=await getPage(n)}catch(e){el.innerHTML='<div class="pt c">تعذر تحميل الصفحة، تأكد من الاتصال</div>';return}
-  let h='';
-  ay.forEach(a=>{
-    let t=a.text;
-    if(a.numberInSurah===1){
-      h+=`<div class="sb">${a.surah.name}</div>`;
-      if(a.surah.number!==1&&a.surah.number!==9){h+='<div class="bs">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';t=t.split(' ').slice(4).join(' ')}
-    }
-    h+=`<span class="ay" data-s="${a.surah.number}" data-a="${a.numberInSurah}" onclick="bookAyah(this)">${t} <span class="num">﴿${ar(a.numberInSurah)}﴾</span></span> `;
-  });
-  el.innerHTML=`<div class="ph"><span>${ay[0].surah.name}</span><span>الجزء ${ar(ay[0].juz)}</span></div><div class="pt${n<3?' c':''}">${h}</div><div class="pn">${ar(n)}</div>`;
-  fit(el);
-}
-function info(){
-  $('bPage').value=cur;
-  $('bInfo').textContent=spread()?`صفحة ${ar(cur)} – ${ar(Math.min(cur+1,TP))} من ${ar(TP)}`:`صفحة ${ar(cur)} من ${ar(TP)}`;
-  try{localStorage.setItem('bp',cur)}catch(e){}
-  clearTimeout(rt);rt=setTimeout(()=>{kidPage(cur);if(spread()&&cur<TP)kidPage(cur+1)},15000);
-  [cur+2,cur+3].forEach(n=>{if(n<=TP)getPage(n).catch(()=>{})});
-}
-async function show(){
-  const sp=spread();BK.classList.toggle('single',!sp);
-  if(sp&&cur%2===0)cur--;
-  await Promise.all([fill(PR,cur),sp?fill(PL,cur+1):0]);
-  info();
-}
-async function bookShow(){
-  if(!bReady){bReady=true;try{cur=+localStorage.getItem('bp')||1}catch(e){}}
-  try{await document.fonts.load('24px "Amiri Quran"')}catch(e){}
-  show();
-}
-function go(n){if(busy)return;cur=Math.max(1,Math.min(TP,Math.round(n)||1));show()}
-async function turn(d){
-  if(busy)return;
-  const sp=spread(),n=cur+d*(sp?2:1);
-  if(n<1||n>TP)return;
-  busy=true;
-  if(!sp){PR.style.opacity=0;await sleep(180);cur=n;await fill(PR,n);PR.style.opacity=1;info();busy=false;return}
-  const fw=d>0,src=fw?PL:PR,fl=document.createElement('div');
-  fl.className='flip '+(fw?'fl':'fr');
-  const f=src.cloneNode(true),b=document.createElement('div');
-  b.className='pg b '+(fw?'R':'L');
-  fl.append(f,b);BK.append(fl);
-  await Promise.all([fill(b,fw?n:n+1),fill(fw?PL:PR,fw?n+1:n)]);
-  void fl.offsetWidth;
-  fl.style.transform=`rotateY(${fw?180:-180}deg)`;
-  await sleep(850);
-  await fill(fw?PR:PL,fw?n:n+1);
-  fl.remove();cur=n;info();busy=false;
-}
-$('bReciter').innerHTML=recOpts;$('bReciter').value=4;
-let dragged=false;
-function bookAyah(el){
-  if(dragged)return;
-  memStop();aud.pause();playBook(el);
-}
-function playBook(el){
-  document.querySelectorAll('#book .ay.cur').forEach(x=>x.classList.remove('cur'));
-  el.classList.add('cur');
-  const r=RECITERS[$('bReciter').value]||RECITERS[4],folder=r.e||RECITERS[4].e,au=$('mAud');
-  au.src=`https://everyayah.com/data/${folder}/${pad(el.dataset.s)}${pad(el.dataset.a)}.mp3`;
-  au.onended=()=>{
-    if(!el.isConnected){bStopUI(false);return}
-    const all=[...document.querySelectorAll('#pR .ay,#pL .ay')],nx=all[all.indexOf(el)+1];
-    if(nx)playBook(nx);else{el.classList.remove('cur');bStopUI(false)}
-  };
-  au.onerror=()=>{el.classList.remove('cur');bStopUI(false)};
-  au.play().then(()=>bStopUI(true)).catch(()=>bStopUI(false));
-}
-$('bPage').onchange=e=>go(+e.target.value);
-$('bSurah').onchange=async e=>go((await getSurah(+e.target.value)).ayahs[0].p);
-document.addEventListener('keydown',e=>{
-  if(!$('book').classList.contains('on')||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
-  if(e.key==='ArrowLeft')turn(1);else if(e.key==='ArrowRight')turn(-1);
-});
-let sx=null;
-BK.onpointerdown=e=>{sx=e.clientX};
-BK.onpointerup=e=>{if(sx===null)return;const dx=e.clientX-sx;sx=null;dragged=Math.abs(dx)>10;setTimeout(()=>dragged=false,50);if(Math.abs(dx)>50)turn(dx>0?1:-1)};
-let rw=spread();
-addEventListener('resize',()=>{if(spread()!==rw){rw=spread();if($('book').classList.contains('on'))show()}});
-
-/* تشغيل واحد فقط في كل مرة */
-aud.addEventListener('play',()=>{if(mRun||!$('mAud').paused)memStop()});
-$('mAud').addEventListener('play',()=>{if(!aud.paused)aud.pause()});
-
-/* الأطفال: حسابات ونقاط ونجوم وكأس */
-const KEY='kidsData',GOAL=3,AVS=['🦁','🐰','🐼','🦊','🐯','🐨','🐸','🦄','🐧','🐱','🐶','🐢'];
-const LV=[[0,'بذرة 🌱'],[100,'برعم 🌿'],[300,'زهرة 🌸'],[600,'بطل القرآن 🛡️'],[1000,'نجم القرآن 🌟']];
-let KD={users:[],me:null},selAv=AVS[0],rt=null;
-try{KD=JSON.parse(localStorage.getItem(KEY))||KD}catch(e){}
-const ksave=()=>{try{localStorage.setItem(KEY,JSON.stringify(KD))}catch(e){}};
-const me=()=>KD.users.find(u=>u.id===KD.me);
-const esc=t=>t.replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
-const nd=t=>(t||'').replace(/[٠-٩]/g,d=>d.charCodeAt(0)-1632);
-const today=()=>new Date().toLocaleDateString('en-CA');
-const lv=p=>[...LV].reverse().find(x=>p>=x[0]);
-function toast(m){
-  let t=$('toast');if(!t){t=document.createElement('div');t.id='toast';document.body.append(t)}
-  t.textContent=m;t.classList.remove('go');void t.offsetWidth;t.classList.add('go');
-}
-function award(pts,msg){
-  const u=me();if(!u)return;
-  const d=today();let ex='';
-  if(u.last!==d){
-    u.streak=u.last===new Date(Date.now()-864e5).toLocaleDateString('en-CA')?(u.streak||0)+1:1;u.last=d;
-    pts+=Math.min(u.streak,7)*2;ex=` + 🔥 ${ar(u.streak)} يوم متتابع`;
-  }
-  const s0=Math.floor(u.tp/25),l0=lv(u.tp)[0];
-  u.tp+=pts;u.cp+=pts;ksave();
-  let m=`+${ar(pts)} نقطة ${msg}${ex}`;
-  if(Math.floor(u.tp/25)>s0)m+=' ⭐ نجمة جديدة!';
-  if(lv(u.tp)[0]>l0)m+=` 🎉 صرت «${lv(u.tp)[1]}»`;
-  toast(m);
-  if($('kids').classList.contains('on'))kidRender();
-}
-function kidPage(n){
-  const u=me();if(!u||!$('book').classList.contains('on'))return;
-  const d=today();if(!u.pg||u.pg.d!==d)u.pg={d,l:[]};
-  if(u.pg.l.includes(n))return;
-  u.pg.l.push(n);
-  let pts=5,msg='لقراءة صفحة '+ar(n);
-  if(u.pg.l.length===GOAL){pts+=15;msg+=' وإتمام وردك اليوم 🎉'}
-  award(pts,msg);
-}
-function kidMem(s,a,b){
-  const u=me();
-  if(!u){toast('سجّل دخولك من تبويب الأطفال لتحصل على نقاطك ⭐');return}
-  const d=today(),k=`${s}:${a}-${b}`;
-  if(!u.mm||u.mm.d!==d)u.mm={d,l:[]};
-  if(u.mm.l.includes(k)){toast('أحسنت! أخذت نقاط هذا المقطع اليوم، جرّب مقطعاً جديداً');return}
-  u.mm.l.push(k);
-  const h=$('mHide').checked;
-  award(Math.min(100,(b-a+1)*3*(h?2:1)),h?'للحفظ بدون النظر ×٢ 🧠':'لحفظ المقطع');
-}
-function kidIn(id){
-  const x=KD.users.find(u=>u.id===id);
-  if(x.pin&&nd(prompt('الرقم السري لـ '+x.name))!==x.pin){toast('الرقم السري غير صحيح');return}
-  KD.me=id;ksave();kidRender();
-}
-function kidOut(){KD.me=null;ksave();kidRender()}
-function kidAdd(){
-  const n=$('kName').value.trim(),p=nd($('kPin').value.trim());
-  if(!n){toast('اكتب اسم الطفل');return}
-  if(p&&!/^\d{4}$/.test(p)){toast('الرقم السري ٤ أرقام');return}
-  const u={id:'u'+Date.now(),name:n,av:selAv,pin:p,tp:0,cp:0,cups:0,streak:0};
-  KD.users.push(u);KD.me=u.id;ksave();kidRender();
-}
-function kidDel(){
-  const u=me();
-  if(u&&confirm('حذف حساب '+u.name+' ونقاطه نهائياً؟')){KD.users=KD.users.filter(x=>x!==u);KD.me=null;ksave();kidRender()}
-}
-function kidNew(){
-  const b=[...KD.users].sort((a,c)=>c.cp-a.cp)[0];
-  if(!b||b.cp<=0){toast('لا توجد نقاط بعد في هذه المنافسة');return}
-  if(!confirm('سيتوّج '+b.name+' بالكأس 🏆 وتبدأ منافسة جديدة من الصفر. متابعة؟'))return;
-  b.cups=(b.cups||0)+1;KD.users.forEach(x=>x.cp=0);ksave();kidRender();toast('🏆 مبروك '+b.name+'! بطل المنافسة');
-}
-function kidRender(){
-  const u=me(),medals=['🏆','🥈','🥉'];
-  const board=[...KD.users].sort((a,b)=>b.cp-a.cp||b.tp-a.tp);
-  const rows=board.length?board.map((x,i)=>`<div class="kr${i===0&&x.cp>0?' first':''}${x.id===KD.me?' me':''}"><b>${(x.cp>0&&medals[i])||ar(i+1)}</b><span class="ka">${x.av}</span><span class="kn">${esc(x.name)}${x.cups?' <small>'+'🏆'.repeat(Math.min(x.cups,5))+(x.cups>5?'+':'')+'</small>':''}</span><span class="kp">${ar(x.cp)} نقطة</span></div>`).join(''):'<p class="status">لا يوجد أطفال بعد، أضف أول بطل!</p>';
-  const board_html=`<h3>🏆 لوحة المنافسة</h3><div class="kb">${rows}</div><div style="text-align:center;margin-bottom:16px"><button class="btn sm ghost" onclick="kidNew()">🏁 إنهاء المنافسة وتتويج البطل</button></div>`;
-  let top;
-  if(u){
-    const L=lv(u.tp),nx=LV.find(x=>x[0]>u.tp),st=Math.floor(u.tp/25),n=(u.pg&&u.pg.d===today())?u.pg.l.length:0;
-    top=`<div class="kcard"><div class="kav">${u.av}</div><h3>${esc(u.name)}</h3><div>${L[1]}</div>
-    <div class="kstats"><div><b>${ar(u.tp)}</b>نقطة</div><div><b>${ar(st)}</b>نجمة</div><div><b>${ar(u.streak||0)}</b>🔥 يوم</div><div><b>${ar(u.cups||0)}</b>🏆 كأس</div></div>
-    <div class="kst">${'⭐'.repeat(Math.min(st,15))}</div>
-    <div class="kgoal">وردك اليوم: ${ar(Math.min(n,GOAL))} من ${ar(GOAL)} صفحات<div class="kbar"><i style="width:${Math.min(100,n/GOAL*100)}%"></i></div></div>
-    ${nx?`<small>باقي ${ar(nx[0]-u.tp)} نقطة لتصبح «${nx[1]}»</small><br>`:''}
-    <button class="btn sm ghost" onclick="kidOut()">تبديل الطفل</button> <button class="btn sm ghost" onclick="kidDel()">حذف الحساب</button></div>
-    <ul class="kway"><li>📖 اقرأ في «المصحف»: كل صفحة تبقى مفتوحة ١٥ ثانية = ٥ نقاط</li><li>🎯 ٣ صفحات في اليوم = وردك اليوم، ومكافأة ١٥ نقطة</li><li>🌙 أتمّ مقطعاً في «التحفيظ»: ٣ نقاط لكل آية، والضعف مع إخفاء النص</li><li>🔥 كل يوم متتابع يزيد المكافأة</li><li>⭐ نجمة جديدة مع كل ٢٥ نقطة</li></ul>`;
-  }else{
-    top=`<h3>من سيقرأ اليوم؟</h3><div class="kpro">${KD.users.map(x=>`<button onclick="kidIn('${x.id}')"><span class="ka">${x.av}</span>${esc(x.name)}</button>`).join('')}</div>
-    <details class="kadd"${KD.users.length?'':' open'}><summary>➕ إضافة طفل جديد</summary>
-    <input id="kName" maxlength="20" placeholder="اسم الطفل">
-    <div class="kavs">${AVS.map(a=>`<button class="${a===selAv?'on':''}" onclick="selAv='${a}';document.querySelectorAll('.kavs button').forEach(b=>b.classList.toggle('on',b.textContent===selAv))">${a}</button>`).join('')}</div>
-    <input id="kPin" maxlength="4" inputmode="numeric" placeholder="رقم سري (اختياري، ٤ أرقام)">
-    <button class="btn sm" onclick="kidAdd()">حفظ</button></details>`;
-  }
-  $('kidBox').innerHTML=top+board_html;
-}
-
-/* تثبيت الموقع كتطبيق (PWA) */
-try{
-  if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
-  const ib=$('instBtn'),standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-  let dp=null;
-  if(!standalone){
-    if(ios)ib.hidden=false;
-    addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;ib.hidden=false});
-    ib.onclick=async()=>{
-      if(dp){dp.prompt();await dp.userChoice;dp=null;ib.hidden=true}
-      else alert('على الآيفون والآيباد: اضغط زر المشاركة ⬆️ في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».');
-    };
-    addEventListener('appinstalled',()=>{ib.hidden=true});
-  }
-}catch(e){}
-
-/* التفسير المختصر: الميسر (عربي) + المختصر (إنجليزي) */
-let tS=1,tA=1,tTok=0;
-const tcache={};
-async function tafData(slug,sn){
-  const k=slug+'/'+sn;if(tcache[k])return tcache[k];
-  const path=`tafsir/${slug}/${sn}.json`;let d;
-  try{d=await(await fetch('https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/'+path)).json()}
-  catch(e){d=await(await fetch('https://raw.githubusercontent.com/spa5k/tafsir_api/main/'+path)).json()}
-  const m={};(Array.isArray(d)?d:(d.ayahs||[])).forEach(a=>{m[a.ayah]=a.text});
-  return tcache[k]=m;
-}
-function tafFill(){
-  const n=SURAHS[tS-1].numberOfAyahs;
-  $('tAyah').innerHTML=Array.from({length:n},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
-  $('tAyah').value=tA;
-}
-function tafOpen(){
-  if(!SURAHS.length){$('tafBox').textContent='جاري التحميل…';setTimeout(tafOpen,600);return}
-  if(!$('tSurah').options.length){
-    $('tSurah').innerHTML=SURAHS.map(x=>`<option value="${x.number}">${x.number}. ${x.name}</option>`).join('');
-    $('tSurah').value=tS;tafFill();
-  }
-  tafShow();
-}
-async function tafShow(){
-  const tk=++tTok,box=$('tafBox');
-  box.innerHTML='<div class="tc">جاري التحميل…</div>';
-  let sd,a1=null,e1=null;
-  try{
-    [sd,a1,e1]=await Promise.all([getSurah(tS),tafData('ar-tafsir-muyassar',tS).catch(()=>null),tafData('en-tafsir-al-mukhtasar',tS).catch(()=>null)]);
-  }catch(e){if(tk===tTok)box.innerHTML='<div class="tc">تعذر تحميل البيانات. تأكد من اتصال الإنترنت.</div>';return}
-  if(tk!==tTok)return;
-  const ay=sd.ayahs.find(a=>a.n===tA)||sd.ayahs[0];
-  const miss='<span class="status">لا يوجد تفسير لهذه الآية في هذا المصدر</span>';
-  const av=a1&&a1[tA],ev=e1&&e1[tA];
-  box.innerHTML=`<div class="tc"><div class="tafAyah">${ay.t} ﴿${ar(tA)}﴾</div></div>
-  <div class="tc"><h4>📘 التفسير الميسر (عربي)</h4><div class="tafAr">${av?esc(av):miss}</div></div>
-  <div class="tc"><h4>📗 Brief Tafsir (English)</h4><div class="tafEn">${ev?esc(ev):miss}</div></div>`;
-}
-$('tSurah').onchange=e=>{tS=+e.target.value;tA=1;tafFill();tafShow()};
-$('tAyah').onchange=e=>{tA=+e.target.value;tafShow()};
-function tafStep(d){
-  if(!SURAHS.length)return;
-  let a=tA+d,sn=tS;
-  if(a<1){if(sn>1){sn--;a=SURAHS[sn-1].numberOfAyahs}else return}
-  else if(a>SURAHS[sn-1].numberOfAyahs){if(sn<114){sn++;a=1}else return}
-  tS=sn;tA=a;$('tSurah').value=sn;tafFill();tafShow();
-}
-
-/* التواصل: نموذج مجاني عبر Web3Forms (البريد لا يظهر في الموقع) */
-const W3F_KEY='71642190-f9be-4564-aad2-6e6b6de2f440';
-let cfLast=0;
-async function cfSubmit(){
-  const st=$('cfStat'),msg=$('cfMsg').value.trim(),mail=$('cfMail').value.trim(),type=$('cfType').value;
-  const say=t=>{st.textContent=t};
-  if(W3F_KEY.startsWith('PASTE')){say('لم يتم تفعيل نموذج التواصل بعد');return}
-  if(msg.length<5){say('اكتب رسالتك أولاً (٥ أحرف على الأقل)');return}
-  if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){say('البريد الإلكتروني غير صحيح');return}
-  if(Date.now()-cfLast<30000){say('انتظر قليلاً قبل إرسال رسالة أخرى');return}
-  const btn=$('cfSend');btn.disabled=true;say('⏳ جاري الإرسال…');
-  try{
-    const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-      body:JSON.stringify({access_key:W3F_KEY,subject:({note:'ملاحظة أو استفسار',bug:'خطأ',idea:'اقتراح'}[type])+' - موقع القرآن الكريم',from_name:$('cfName').value.trim()||'زائر',
-        email:mail||undefined,type,message:msg,botcheck:$('cfBot').value,page:location.href,browser:navigator.userAgent,lang:window.LANG})});
-    const d=await r.json();
-    if(d.success){say('✅ وصلت رسالتك، شكراً لك!');$('cfMsg').value='';cfLast=Date.now()}
-    else say('تعذر الإرسال، حاول لاحقاً');
-  }catch(e){say('تعذر الإرسال، حاول لاحقاً')}
-  btn.disabled=false;
-}
-
-/* صوت القراءة (متوقف افتراضياً) وزر إيقاف صوت المصحف */
-let rSnd=false;try{rSnd=localStorage.getItem('rsnd')==='1'}catch(e){}
-function rSoundUI(){$('rSnd').textContent=rSnd?'🔊 الصوت: يعمل':'🔇 الصوت: متوقف'}
-function rSound(){
-  rSnd=!rSnd;try{localStorage.setItem('rsnd',rSnd?'1':'0')}catch(e){}
-  rSoundUI();
-  if(!rSnd&&$('read').classList.contains('on'))$('mAud').pause();
-}
-rSoundUI();
-let bookActive=false;
-function bStopUI(v){bookActive=v;$('bStop').hidden=!v}
-function bookStop(){
-  const au=$('mAud');au.onended=null;au.pause();
-  document.querySelectorAll('#book .ay.cur').forEach(x=>x.classList.remove('cur'));
-  bStopUI(false);
-}
-$('mAud').addEventListener('pause',()=>{if(!$('mAud').ended)bStopUI(false)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&bookActive)bookStop()});
-
-/* الواجهة العربية / English */
-window.LANG='ar';try{window.LANG=localStorage.getItem('lang')||'ar'}catch(e){}
-const LVEN={'بذرة 🌱':'Seed 🌱','برعم 🌿':'Sprout 🌿','زهرة 🌸':'Flower 🌸','بطل القرآن 🛡️':'Quran Hero 🛡️','نجم القرآن 🌟':'Quran Star 🌟'};
-const RCEN={'عبدالباسط عبد الصمد':'Abdul Basit Abdus-Samad','محمود خليل الحصري':'Mahmoud Khalil Al-Husary','ياسر الدوسري':'Yasser Al-Dosari','سعد الغامدي':'Saad Al-Ghamdi','مشاري العفاسي':'Mishary Alafasy','عبدالرحمن السديس':'Abdul Rahman Al-Sudais','سعود الشريم':'Saud Al-Shuraim','وديع اليمني':'Wadee Al-Yamani','أنس العمادي':'Anas Al-Emadi','محمد أيوب':'Muhammad Ayyub'};
-const EN=Object.assign({},LVEN,RCEN,{
-'ادخل':'Enter','القرآن الكريم':'The Holy Quran','اقرأ • استمع • احفظ':'Read • Listen • Memorize','📲 ثبّت التطبيق':'📲 Install app',
-'📖 القراءة':'📖 Read','📜 المصحف':'📜 Mushaf','📚 التفسير':'📚 Tafsir','🎧 الاستماع':'🎧 Listen','🌙 التحفيظ':'🌙 Memorize','⭐ الأطفال':'⭐ Kids',
-'السورة':'Surah','الآية':'Ayah','حجم الخط':'Font size','جاري التحميل…':'Loading…','القارئ':'Reciter','الصفحة':'Page',
-'← السورة التالية':'Next surah','السورة السابقة →':'Previous surah','→ السابقة':'Previous','التالية ←':'Next',
-'اختر سورة للاستماع':'Choose a surah to listen to','الصفحة التالية':'Next page','الصفحة السابقة':'Previous page',
-'اسحب بالماوس أو الإصبع، أو استخدم أسهم لوحة المفاتيح ← →':'Drag with mouse or finger, or use the ← → keys (← next page, → previous)',
-'من آية':'From ayah','إلى آية':'To ayah','تكرار كل آية':'Repeat each ayah','إعادة المقطع':'Loop passage','إخفاء النص (اختبر حفظك)':'Hide text (test yourself)',
-'▶ ابدأ':'▶ Start','■ إيقاف':'■ Stop','اختر السورة…':'Choose a surah…',
-'نصيحة: كرر الآية حتى تحفظها، ثم أخفِ النص واختبر نفسك. اضغط على أي آية لتبدأ منها.':'Tip: repeat the ayah until you know it, then hide the text and test yourself. Tap any ayah to start from it.',
-'النقاط والترتيب محفوظة على هذا الجهاز وهذا المتصفح.':'Points and rankings are saved on this device and browser only.',
-'المصادر: التفسير الميسر (عربي) • المختصر في تفسير القرآن الكريم (إنجليزي)':'Sources: Al-Tafsir Al-Muyassar (Arabic) • Al-Mukhtasar fi Tafsir al-Quran al-Karim (English)',
-'📘 التفسير الميسر (عربي)':'📘 Al-Tafsir Al-Muyassar (Arabic)','لا يوجد تفسير لهذه الآية في هذا المصدر':'No tafsir for this ayah in this source',
-'تعذر تحميل البيانات. تأكد من اتصال الإنترنت.':'Could not load data. Check your internet connection.',
-'تعذر تشغيل الصوت لهذا القارئ/السورة، جرّب قارئاً آخر.':'Could not play audio for this reciter/surah. Try another reciter.',
-'✔ انتهى المقطع، بارك الله فيك':'✔ Passage finished, may Allah bless you','تعذر تحميل الصوت، جرّب قارئاً آخر.':'Could not load audio. Try another reciter.',
-'تعذر تحميل الصفحة، تأكد من الاتصال':'Could not load the page. Check your connection.',
-'من سيقرأ اليوم؟':'Who is reading today?','➕ إضافة طفل جديد':'➕ Add a new child','حفظ':'Save','اسم الطفل':"Child's name",'رقم سري (اختياري، ٤ أرقام)':'PIN (optional, 4 digits)',
-'🏆 لوحة المنافسة':'🏆 Leaderboard','🏁 إنهاء المنافسة وتتويج البطل':'🏁 End competition & crown the champion',
-'نقطة':'points','نجمة':'stars','🔥 يوم':'🔥 days','🏆 كأس':'🏆 cups','تبديل الطفل':'Switch child','حذف الحساب':'Delete account',
-'لا يوجد أطفال بعد، أضف أول بطل!':'No children yet. Add the first champion!',
-'📖 اقرأ في «المصحف»: كل صفحة تبقى مفتوحة ١٥ ثانية = ٥ نقاط':'📖 Read in the Mushaf: every page kept open for 15 seconds = 5 points',
-'🎯 ٣ صفحات في اليوم = وردك اليوم، ومكافأة ١٥ نقطة':'🎯 3 pages a day = your daily wird, plus a 15-point bonus',
-'🌙 أتمّ مقطعاً في «التحفيظ»: ٣ نقاط لكل آية، والضعف مع إخفاء النص':'🌙 Finish a passage in Memorize: 3 points per ayah, double with the text hidden',
-'🔥 كل يوم متتابع يزيد المكافأة':'🔥 Every consecutive day increases the bonus','⭐ نجمة جديدة مع كل ٢٥ نقطة':'⭐ A new star every 25 points',
-'سجّل دخولك من تبويب الأطفال لتحصل على نقاطك ⭐':'Log in from the Kids tab to earn your points ⭐',
-'أحسنت! أخذت نقاط هذا المقطع اليوم، جرّب مقطعاً جديداً':'Well done! You already earned points for this passage today. Try a new one.',
-'الرقم السري غير صحيح':'Wrong PIN','اكتب اسم الطفل':"Enter the child's name",'الرقم السري ٤ أرقام':'The PIN must be 4 digits','لا توجد نقاط بعد في هذه المنافسة':'No points yet in this competition',
-'على الآيفون والآيباد: اضغط زر المشاركة ⬆️ في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».':'On iPhone/iPad: tap the Share button ⬆️ in Safari, then choose “Add to Home Screen”.',
-'لأي ملاحظات أو استفسارات أو اقتراحات، تواصل معنا:':'Any comments, questions or suggestions? Contact us:',
-'💬 ملاحظة أو استفسار':'💬 Comment or question','🔊 الصوت: يعمل':'🔊 Sound: on','جاري تحميل بيانات هذا القارئ، حاول بعد لحظات أو اختر قارئاً آخر.':'Loading this reciter’s data. Try again in a moment or choose another reciter.','هذه السورة غير متوفرة لهذا القارئ، جرّب قارئاً آخر.':'This surah is not available for this reciter. Try another reciter.','🔇 الصوت: متوقف':'🔇 Sound: off','⏹ إيقاف الصوت':'⏹ Stop audio','🐞 خطأ في الموقع':'🐞 Bug report','💡 اقتراح إضافة':'💡 Suggest a feature',
-'اكتب رسالتك هنا…':'Write your message here…','اسمك (اختياري)':'Your name (optional)','بريدك للرد عليك (اختياري)':'Your email so we can reply (optional)',
-'إرسال':'Send','⏳ جاري الإرسال…':'⏳ Sending…','✅ وصلت رسالتك، شكراً لك!':'✅ Message received, thank you!','تعذر الإرسال، حاول لاحقاً':'Could not send. Please try again later.',
-'اكتب رسالتك أولاً (٥ أحرف على الأقل)':'Please write your message first (at least 5 characters)','البريد الإلكتروني غير صحيح':'The email address is not valid',
-'انتظر قليلاً قبل إرسال رسالة أخرى':'Please wait a moment before sending another message','لم يتم تفعيل نموذج التواصل بعد':'The contact form has not been activated yet'
-});
-const RCRE=new RegExp(Object.keys(RCEN).join('|'),'g');
-const SUB=[
-[/^\+(\S+) نقطة /,'+$1 points '],
-[/لقراءة صفحة (\S+)/,'for reading page $1'],
-[/ وإتمام وردك اليوم 🎉/,' and completing your daily wird 🎉'],
-[/للحفظ بدون النظر ×٢ 🧠/,'for memorizing without looking ×2 🧠'],
-[/لحفظ المقطع/,'for memorizing the passage'],
-[/ \+ 🔥 (\S+) يوم متتابع/,' + 🔥 $1-day streak'],
-[/ ⭐ نجمة جديدة!/,' ⭐ New star!'],
-[/ 🎉 صرت «(.+)»/,(m,l)=>` 🎉 You are now “${LVEN[l]||l}”`],
-[/^🏆 مبروك (.+)! بطل المنافسة$/,'🏆 Congratulations $1! Champion of the competition'],
-[/^الآية (\S+) — التكرار (\S+) من (\S+)/,'Ayah $1 — repeat $2 of $3'],
-[/ \(بصوت العفاسي — التحفيظ آية بآية غير متوفر لهذا القارئ\)/,' (Alafasy voice: ayah-by-ayah not available for this reciter)'],
-[/^صفحة (\S+) – (\S+) من (\S+)$/,'Page $1–$2 of $3'],
-[/^صفحة (\S+) من (\S+)$/,'Page $1 of $2'],
-[/^(\S+) آية • مكية$/,'$1 ayahs • Meccan'],
-[/^(\S+) آية • مدنية$/,'$1 ayahs • Medinan'],
-[/^سورة (.+) — (.+)$/,(m,a,b)=>`Surah ${sn()[a.trim()]||a} — ${RCEN[b]||b}`],
-[/^(\d+)\. (.+)$/,(m,n,a)=>sn()[a]?`${n}. ${sn()[a]}`:m],
-[/^وردك اليوم: (\S+) من (\S+) صفحات$/,"Today's wird: $1 of $2 pages"],
-[/^باقي (\S+) نقطة لتصبح «(.+)»$/,(m,n,l)=>`${n} more points to become “${LVEN[l]||l}”`],
-[/^(\S+) نقطة$/,'$1 pts'],
-[/^الرقم السري لـ (.+)$/,'PIN for $1'],
-[/^حذف حساب (.+) ونقاطه نهائياً؟$/,'Permanently delete $1 and their points?'],
-[/^سيتوّج (.+) بالكأس 🏆 وتبدأ منافسة جديدة من الصفر. متابعة؟$/,'$1 will be crowned with the cup 🏆 and a new competition starts from zero. Continue?']
-];
-let SNM=null;
-const sn=()=>{if(!SNM&&typeof SURAHS!=='undefined'&&SURAHS.length){SNM={};SURAHS.forEach(x=>{SNM[x.name]=x.englishName})}return SNM||{}};
-const SKIP='.pg,.mushaf .text,.mushaf .sname,.mushaf .bismillah,.mem .ayah,.tafAyah,.tafAr,.tafEn,.ticker,footer,#splash .bism,#splash .ayah,script,style,#langBtn';
-function tx(str){
-  const m=str.match(/^(\s*)([\s\S]*?)(\s*)$/),c=m[2];
-  if(!c||!/[\u0600-\u06FF]/.test(c))return str;
-  let r=EN[c];
-  if(r===undefined){r=sn()[c]}
-  if(r===undefined){
-    r=c;for(const [re,f] of SUB)r=r.replace(re,f);
-    r=r.replace(RCRE,x=>RCEN[x]);
-    if(r===c)return str;
-    r=nd(r);
-  }
-  return m[1]+r+m[3];
-}
-function trNode(n){
-  const p=n.parentElement;if(!p||p.closest(SKIP))return;
-  if(n.__t!==undefined&&n.nodeValue===n.__t)return;
-  const o=n.nodeValue,v=tx(o);
-  if(v!==o){n.__o=o;n.__t=v;n.nodeValue=v}
-}
-function trAttr(el){
-  ['placeholder','title'].forEach(a=>{
-    const v=el.getAttribute(a);if(!v)return;
-    if(el.dataset['o'+a]===undefined){const t=tx(v);if(t!==v){el.dataset['o'+a]=v;el.setAttribute(a,t)}}
-  });
-}
-function trAll(root){
-  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),a=[];let n;
-  while(n=w.nextNode())a.push(n);
-  a.forEach(trNode);
-  if(root.querySelectorAll)root.querySelectorAll('[placeholder],[title]').forEach(trAttr);
-}
-function untr(){
-  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
-  while(n=w.nextNode()){if(n.__o!==undefined){n.nodeValue=n.__o;n.__o=undefined;n.__t=undefined}}
-  document.querySelectorAll('[data-oplaceholder],[data-otitle]').forEach(el=>{
-    ['placeholder','title'].forEach(a=>{const k='o'+a;if(el.dataset[k]!==undefined){el.setAttribute(a,el.dataset[k]);delete el.dataset[k]}});
-  });
-}
-new MutationObserver(ms=>{
-  if(window.LANG!=='en')return;
-  ms.forEach(m=>{
-    if(m.type==='characterData')trNode(m.target);
-    else m.addedNodes.forEach(n=>{if(n.nodeType===3)trNode(n);else if(n.nodeType===1){trAll(n);trAttr(n)}});
-  });
-}).observe(document.body,{childList:true,subtree:true,characterData:true});
-function setLang(l){
-  window.LANG=l;try{localStorage.setItem('lang',l)}catch(e){}
-  const h=document.documentElement;h.lang=l;h.dir=l==='en'?'ltr':'rtl';
-  document.title=l==='en'?'The Holy Quran — Read, Listen & Memorize':'القرآن الكريم — قراءة واستماع وتحفيظ';
-  $('langBtn').textContent=l==='en'?'عربي':'English';
-  if(l==='en')trAll(document.body);else untr();
-  if($('book').classList.contains('on'))info();
-  if($('kids').classList.contains('on'))kidRender();
-  if($('tafsir').classList.contains('on'))tafShow();
-}
-$('langBtn').onclick=()=>setLang(window.LANG==='en'?'ar':'en');
-const _al=window.alert.bind(window),_cf=window.confirm.bind(window),_pr=window.prompt.bind(window);
-window.alert=m=>_al(window.LANG==='en'?tx(String(m)):m);
-window.confirm=m=>_cf(window.LANG==='en'?tx(String(m)):m);
-window.prompt=(m,d)=>_pr(window.LANG==='en'?tx(String(m)):m,d);
-setLang(window.LANG);
+renderEps(); showCh(0); showFam(0);
+showView(VIEWS.some(v=>"#"+v[0]===location.hash) ? location.hash.slice(1) : "audio");
+/* ابدأ دائمًا من أعلى الصفحة (الشريط والعنوان) */
+if("scrollRestoration" in history) history.scrollRestoration = "manual";
+if(location.hash) history.replaceState(null,"",location.pathname+location.search);
+scrollTo(0,0);
+addEventListener("load",()=>scrollTo(0,0));
+addEventListener("pageshow",()=>scrollTo(0,0));
 </script>
 </body>
 </html>
